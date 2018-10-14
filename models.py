@@ -1,7 +1,7 @@
 __author__ = 'alemaxona'
 
 '''
- models.py - Classes objects game
+models.py - Classes objects game
 '''
 
 
@@ -52,10 +52,14 @@ class Field(object):
     def __init__(self, size, size2):
         self.size = size
         self.size2 = size2
-        self.mark = '*'
+        self.result = None
 
     def init_field(self):
-        self.size = [list(i) * int(self.size) for i in self.mark] * int(self.size2)
+        # Использовать генератор!
+        self.result = [['*'] * self.size for i in range(self.size2)]
+        # self.result = [['*' for j in range(self.size)] for i in range(self.size2)]  # ПРАВИЛЬНО!
+
+        # self.size = [list(i) * int(self.size) for i in self.mark] * int(self.size2)  # НЕПРАВИЛЬНО!
         return self.size
 
 
@@ -82,10 +86,10 @@ print(s.shot)
 
 s1 = Storage
 print(s1.shot)
-'''
 
-a = [[0,0,0],[0,0,0],[0,0,0]]
-Storage.field_player1 = a.copy()
-print(Storage.field_player1)
-Storage.field_player1[0][0] = 'X'
-print(Storage.field_player1)
+
+field = Field(5, 5)
+field.init_field()
+for i in field.result:
+    print(i)
+'''

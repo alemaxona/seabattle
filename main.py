@@ -38,14 +38,12 @@ else:
     print('Welcome player', player2.name)
 
 
-
 # Show field
 field = Field(field_coo[0], field_coo[1])
 field.init_field()
-########## ТУТ!
-Storage.field_player1 = field.size.copy()
+Storage.field_player1 = field.result.copy()
 print('\n FIELD')
-for i in field.size:
+for i in field.result:
     print(i)
 
 
@@ -58,19 +56,7 @@ while True:
     if isinstance(ship_coo, list):
         break
 
-a = [['*', '*', '*'], ['*', '*', '*'], ['*', '*', '*']]
-if Storage.field_player1 == a:
-    print(True)
-else:
-    False
 print(ship_coo)
 Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
-print(Storage.field_player1)
-
-#
-#
-# ship_player1_once = Ship(1,[])
-#
-# print(Storage.field_player1)
-# print(len(Storage.field_player1))
-# print(field.size)
+for i in Storage.field_player1:
+    print(i)
