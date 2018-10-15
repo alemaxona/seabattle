@@ -37,11 +37,11 @@ def user_input_coo_ship(value1, value2):
             elif int(coo_y) <= 0:
                 print('Enter number Y > 0')
                 break
-            elif int(coo_x) > len(Storage.field_player1[0]):
-                print('Enter number X <', len(Storage.field_player1[0]))
+            elif int(coo_x - 1) >= len(Storage.field_player1):
+                print('Enter number X < or =', len(Storage.field_player1))
                 break
-            elif int(coo_y) > len(Storage.field_player1):
-                print('Enter number Y <', len(Storage.field_player1))
+            elif int(coo_y) > len(Storage.field_player1[0]):
+                print('Enter number Y < or =', len(Storage.field_player1[0]))
                 break
             else:
                 value3 = [(coo_x - 1), (coo_y - 1)]

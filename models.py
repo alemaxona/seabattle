@@ -60,7 +60,7 @@ class Field(object):
         # self.result = [['*' for j in range(self.size)] for i in range(self.size2)]  # ПРАВИЛЬНО!
 
         # self.size = [list(i) * int(self.size) for i in self.mark] * int(self.size2)  # НЕПРАВИЛЬНО!
-        return self.size
+        return self.result
 
 
 class Ship(object):

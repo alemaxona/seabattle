@@ -38,7 +38,7 @@ else:
     print('Welcome player', player2.name)
 
 
-# Show field
+# Show clean field
 field = Field(field_coo[0], field_coo[1])
 field.init_field()
 Storage.field_player1 = field.result.copy()
@@ -47,8 +47,8 @@ for i in field.result:
     print(i)
 
 
-# Enter coordinates ship
-print('\n', player1.name, ', please enter coordinates ship (1 cell)')
+# Enter coordinates ship 1
+print('\n', player1.name, ', enter coordinates ship (1 cell)')
 while True:
     ship_coo_x = input('\nX = ')
     ship_coo_y = input('Y = ')
@@ -56,7 +56,37 @@ while True:
     if isinstance(ship_coo, list):
         break
 
+
+# Write map with ship(1 cell) in storage
 print(ship_coo)
+print(Storage.field_player1)
+print('rows len',len(Storage.field_player1))
+print('col len',len(Storage.field_player1[0]))
 Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
+for i in Storage.field_player1:
+    print(i)
+
+
+# Enter coordinates ship 2
+if len(Storage.field_player1) >= 2:
+    print('\n', player1.name, ', enter coordinates ship (2 cell)')
+    while True:
+        print('\n Enter 1 cell ship')
+        ship_coo_x1 = input('X = ')
+        ship_coo_y1 = input('Y = ')
+        ship_coo = user_input_coo_ship(ship_coo_x1, ship_coo_y1)
+        if isinstance(ship_coo, list):
+            print('\n Enter 2 cell ship')
+            ship_coo_x2 = input('X = ')
+            ship_coo_y2 = input('Y = ')
+            ship_coo_2 = user_input_coo_ship(ship_coo_x2, ship_coo_y2)
+            if isinstance(ship_coo_2, list):
+                if ship_coo_2[0]:
+                    # !
+                    break
+
+# Write map with ship(2 cell) in storage
+Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
+Storage.field_player1[ship_coo_2[0]][ship_coo_2[1]] = '[]'
 for i in Storage.field_player1:
     print(i)
