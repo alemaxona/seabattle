@@ -1,15 +1,21 @@
 __author__ = 'alemaxona'
 
 '''
-models.py - Classes objects game
+models.py - Classes objects game | Классы объектов игры.
 '''
 
 
 class Storage(object):
-    player1 = ''
+
+    '''Players data storage. | Хранилище данных игроков.'''
+
+    field = []
+
+    player1 = ''  # {}
+    field_player1 = []
     ship_player1 = {}
     shot_player1 = []
-    field_player1 = []
+
     player2 = ''
 
     @staticmethod
@@ -21,33 +27,30 @@ class Storage(object):
         Storage.player2 = value
 
     @staticmethod
-    def add_ship_player1(key, value):
-        Storage.ship_player1[key] = value
+    def add_ship_player1(size, key):
+        Storage.ship_player1[key] = size
 
     @staticmethod
     def add_shot_player1(value):
         Storage.shot_player1.append(value)
 
 
-class Gamer(object):
+class Player(object):
 
-    ''' Gamers in game only two! '''
+    '''Gamers in game only two. | Количество игроков в игре - 2.'''
 
-    queue = 0
-
-    def __init__(self, name):
+    def __init__(self, name, queue):
         self.name = name
-        if Gamer.queue > 0:
-            Storage.add_player2(name)
-            Gamer.queue += 1
-        else:
+        self.queue = queue
+        if self.queue == 1:
             Storage.add_player1(name)
-            Gamer.queue += 1
+        else:
+            Storage.add_player2(name)
 
 
 class Field(object):
 
-    ''' Field game '''
+    '''Game field generator | Генератор карты игры.'''
 
     def __init__(self, size, size2):
         self.size = size
@@ -55,10 +58,9 @@ class Field(object):
         self.result = None
 
     def init_field(self):
-        # Использовать генератор!
+        # Используем генератор.
         self.result = [['*'] * self.size for i in range(self.size2)]
         # self.result = [['*' for j in range(self.size)] for i in range(self.size2)]  # ПРАВИЛЬНО!
-
         # self.size = [list(i) * int(self.size) for i in self.mark] * int(self.size2)  # НЕПРАВИЛЬНО!
         return self.result
 
@@ -67,9 +69,11 @@ class Ship(object):
     def __init__(self, size, key):
         self.size = size
         self.key = key
+        Storage.add_ship_player1([self.size], self.key)
 
-    def init_ship(self):
-        Storage.add_ship_player1(self.key, self.size)
+    def build_ship(self, coo1, coo2):
+        self.x = int(coo1)
+        self.y = int(coo2)
 
 
 class Shot(object):
@@ -92,4 +96,7 @@ field = Field(5, 5)
 field.init_field()
 for i in field.result:
     print(i)
+
+x = Ship([0, 0], 1)
+print(Storage.ship_player1)
 '''

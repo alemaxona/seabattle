@@ -1,17 +1,19 @@
 __author__ = 'alemaxona'
 
 '''
-user_input.py - Functions inputs users
+user_input.py - Functions inputs users 
 '''
 
 from models import Storage
 
 
-def user_input_coo_field(value1, value2):
+def user_input_coo_field():
     while True:
         try:
-            coo_x = int(value1)
-            coo_y = int(value2)
+            x = input('X = ')
+            y = input('Y = ')
+            coo_x = int(x)
+            coo_y = int(y)
             if int(coo_x) < 3:
                 print('Enter number X > 3')
                 break
@@ -26,22 +28,24 @@ def user_input_coo_field(value1, value2):
             break
 
 
-def user_input_coo_ship(value1, value2):
+def user_input_coo_ship():
     while True:
         try:
-            coo_x = int(value1)
-            coo_y = int(value2)
+            x = input('\nX = ')
+            y = input('Y = ')
+            coo_x = int(x)
+            coo_y = int(y)
             if int(coo_x) <= 0:
                 print('Enter number X > 0')
                 break
             elif int(coo_y) <= 0:
                 print('Enter number Y > 0')
                 break
-            elif int(coo_x - 1) >= len(Storage.field_player1):
-                print('Enter number X < or =', len(Storage.field_player1))
+            elif int(coo_x - 1) >= len(Storage.field):
+                print('Enter number X < or =', len(Storage.field))
                 break
-            elif int(coo_y) > len(Storage.field_player1[0]):
-                print('Enter number Y < or =', len(Storage.field_player1[0]))
+            elif int(coo_y) > len(Storage.field[0]):
+                print('Enter number Y < or =', len(Storage.field[0]))
                 break
             else:
                 value3 = [(coo_x - 1), (coo_y - 1)]
