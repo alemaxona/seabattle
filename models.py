@@ -11,23 +11,22 @@ class Storage(object):
 
     field = []
 
-    player1 = ''  # {}
+    players = {}
+
     field_player1 = []
     ship_player1 = {}
     shot_player1 = []
 
-    player2 = ''
+    field_player2 = []
+    ship_player2 = {}
+    shot_player2 = []
 
     @staticmethod
-    def add_player1(value):
-        Storage.player1 = value
+    def add_players(key, value):
+        Storage.players[key] = value
 
     @staticmethod
-    def add_player2(value):
-        Storage.player2 = value
-
-    @staticmethod
-    def add_ship_player1(size, key):
+    def add_ship_player1(key, size):
         Storage.ship_player1[key] = size
 
     @staticmethod
@@ -42,10 +41,7 @@ class Player(object):
     def __init__(self, name, queue):
         self.name = name
         self.queue = queue
-        if self.queue == 1:
-            Storage.add_player1(name)
-        else:
-            Storage.add_player2(name)
+        Storage.add_players(queue, name)
 
 
 class Field(object):
@@ -67,13 +63,11 @@ class Field(object):
 
 class Ship(object):
     def __init__(self, size, key):
-        self.size = size
+        self.size = [size]
         self.key = key
-        Storage.add_ship_player1([self.size], self.key)
 
-    def build_ship(self, coo1, coo2):
-        self.x = int(coo1)
-        self.y = int(coo2)
+    def write_ship(self):
+        Storage.add_ship_player1(self.key, self.size)
 
 
 class Shot(object):
@@ -82,21 +76,41 @@ class Shot(object):
         self.y = y
 
 
-'''
-s = Storage
-s.add_shot([2,3])
-s.add_shot([3,3])
-print(s.shot)
+def check_busy(size, number_player):
+    if number_player == 1:
+        if Storage.field_player1[size[0]][size[1]] != '*':
+            return False
+        else:
+            return True
+    else:
+        if Storage.field_player2[size[0]][size[1]] != '*':
+            return False
+        else:
+            return True
 
-s1 = Storage
-print(s1.shot)
+
+def check_build_ship_logic(size, key_ship, number_part_ship):
+    if number_player == 1:
+        if Storage.field_player1[0]:
+            return False
+        else:
+            return True
 
 
-field = Field(5, 5)
-field.init_field()
-for i in field.result:
-    print(i)
-
-x = Ship([0, 0], 1)
-print(Storage.ship_player1)
-'''
+# s = Storage
+# s.add_shot([2,3])
+# s.add_shot([3,3])
+# print(s.shot)
+#
+# s1 = Storage
+# print(s1.shot)
+#
+#
+# field = Field(5, 5)
+# field.init_field()
+# for i in field.result:
+#     print(i)
+#
+# x = Ship([0, 0], 1)
+# x.write_ship()
+# print(Storage.ship_player1)

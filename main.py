@@ -5,7 +5,7 @@ main.py - Game logic
 '''
 
 
-from models import Field, Player, Ship, Storage
+from models import Field, Player, Ship, Storage, check_busy, check_build_ship_logic
 from user_input import user_input_coo_ship, user_input_coo_field
 
 
@@ -40,64 +40,81 @@ field.init_field()
 Storage.field = field.result.copy()
 
 
-# Show clean field
-print('\n FIELD')
+print('\n FIELD')  # Show clean field
 for i in field.result:
     print(i)
 
 
-# Write field in player1 storage
-Storage.field_player1 = field.result.copy()
+Storage.field_player1 = field.result.copy()  # Write field in player1 storage
 
 
-# Enter coordinates ship 1
-print('\n', player1.name, ', enter coordinates ship (1 cell)')
+print('\n', player1.name, ', enter coordinates ship (1 cell)')  # Enter coordinates ship 1
 while True:
     ship_coo = user_input_coo_ship()
     if isinstance(ship_coo, list):
         break
 
 
-# Write map with ship(1 cell) in storage
-Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
+Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'  # Write map with ship(1 cell) in player1 storage
+ship1_player1 = Ship(ship_coo, 1)  # Init player1 ship(1cell)
+ship1_player1.write_ship()  # Write ship(1cell) in player1 storage
 
 
-# Write ship(1cell) in storage
-ship1_player1 = Ship(ship_coo, 1)
-
-
-# Show map player1 with ship/s
-for i in Storage.field_player1:
+for i in Storage.field_player1:  # Show map player1 with ship/s
     print(i)
 
-# Show Storage
-# print('\nName:', Storage.player1,
-#       '\nField:', Storage.field_player1,
-#       '\nShips', Storage.ship_player1,
-#       '\nShots', Storage.shot_player1)
+
+# Enter coordinates ship 2
+if len(Storage.field) >= 2:
+    print('\n', player1.name, ', enter coordinates ship (2 cell)')
+    while True:
+        print('\nEnter 1 cell ship')
+        ship_coo = user_input_coo_ship()
+        if isinstance(ship_coo, list):
+            if check_busy(ship_coo, 1) == False:  # Check cell for busy
+                print('Cell is busy! Enter coo again.')
+            else:
+                # Write map with ship(1.2 cell) in player1 storage
+                Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
+                ship2_player1 = Ship(ship_coo, 2)  # Init player1 ship(1cell)
+                # ship2_player1.write_ship()  # Write ship(2.1cell) in player1 storage
+                flag = 0
+                while flag == 0:
+                    print('\nEnter 2 cell ship')
+                    ship_coo = user_input_coo_ship()
+                    if check_busy(ship_coo, 1) == False:  # Check cell for busy
+                        print('Cell is busy! Enter coo again.')
+                    else:
+                        if check_build_ship_logic(ship_coo, 2, 2) == False:
+                            print('Ship is not build! Enter again!')
+                        else:
+                            if isinstance(ship_coo, list):
+                                # Add ship(2.2cell) in player1 storage
+                                ship2_player1.size[2].append([ship_coo[0], ship_coo[1]])
+                                # Write map with ship(2.2 cell) in player1 storage
+                                Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
+                                break
+        else:
+            print('Enter again!')
 
 
-# # Enter coordinates ship 2
-# if len(Storage.field_player1) >= 2:
-#     print('\n', player1.name, ', enter coordinates ship (2 cell)')
-#     while True:
-#         print('\n Enter 1 cell ship')
-#         ship_coo_x1 = input('X = ')
-#         ship_coo_y1 = input('Y = ')
-#         ship_coo = user_input_coo_ship(ship_coo_x1, ship_coo_y1)
-#         if isinstance(ship_coo, list):
-#             print('\n Enter 2 cell ship')
-#             ship_coo_x2 = input('X = ')
-#             ship_coo_y2 = input('Y = ')
-#             ship_coo_2 = user_input_coo_ship(ship_coo_x2, ship_coo_y2)
-#             # if
-#             if isinstance(ship_coo_2, list):
-#                 if ship_coo_2[0]:
-#                     # !
-#                     break
-#
-# # Write map with ship(2 cell) in storage
-# Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
-# Storage.field_player1[ship_coo_2[0]][ship_coo_2[1]] = '[]'
-# for i in Storage.field_player1:
-#     print(i)
+for i in Storage.field_player1:  # Show map player1 with ship/s
+    print(i)
+
+
+# Show player1 Storage
+print('\nName:', Storage.players[1],
+      '\nField:', Storage.field_player1,
+      '\nShips', Storage.ship_player1,
+      '\nShots', Storage.shot_player1)
+
+
+'''All objects:'''
+
+# player1
+# player2
+
+# field
+
+# ship1_player1
+# ship2_player1
