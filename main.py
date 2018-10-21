@@ -40,33 +40,70 @@ field.init_field()
 Storage.field = field.result.copy()
 
 
-print('\n FIELD')  # Show clean field
+# Show clean field
+print('\n FIELD')
 for i in field.result:
     print(i)
+
+
+# Sum all cell for max ships
+sum_cell = len(Storage.field) * len(Storage.field[0])
+if sum_cell <= 20:
+    max_ship1 = 1
+    max_ship2 = 0
+    max_ship3 = 0
+    max_ship4 = 0
+elif sum_cell >= 20 and sum_cell <= 25:
+    max_ship1 = 2
+    max_ship2 = 1
+    max_ship3 = 1
+    max_ship4 = 0
+elif sum_cell >= 40 and sum_cell <= 50:
+    max_ship1 = 3
+    max_ship2 = 2
+    max_ship3 = 1
+    max_ship4 = 0
+elif sum_cell >= 50 and sum_cell <= 100:
+    max_ship1 = 4
+    max_ship2 = 3
+    max_ship3 = 2
+    max_ship4 = 1
 
 
 Storage.field_player1 = field.result.copy()  # Write field in player1 storage
 
 
-print('\n', player1.name, ', enter coordinates ship (1 cell)')  # Enter coordinates ship 1
-while True:
-    ship_coo = user_input_coo_ship()
-    if isinstance(ship_coo, list):
-        break
+# Enter coordinates all ships - []
+print('\n', player1.name, ', enter coordinates ships (1 cell)')
+i = 1
+while i <= max_ship1:
+        ship_coo = user_input_coo_ship()
+        if isinstance(ship_coo, list):
+            if check_busy(ship_coo, 1) == False:  # Check cell for busy
+                print('Cell is busy! Enter coo again.')
+            else:
+                n = 1.0
+                Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'  # Write map with ship(1 cell) in player1 storage
+                ship1_player1 = Ship(ship_coo, n)  # Init player1 ship(1cell)
+                ship1_player1.write_ship()  # Write ship(1cell) in player1 storage
+                n += 0.1
+                i += 1
 
-
-Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'  # Write map with ship(1 cell) in player1 storage
-ship1_player1 = Ship(ship_coo, 1)  # Init player1 ship(1cell)
-ship1_player1.write_ship()  # Write ship(1cell) in player1 storage
+# Show player1 Storage
+print('\nName:', Storage.players[1],
+      '\nField:', Storage.field_player1,
+      '\nShips', Storage.ship_player1,
+      '\nShots', Storage.shot_player1)
 
 
 for i in Storage.field_player1:  # Show map player1 with ship/s
     print(i)
 
 
-# Enter coordinates ship 2
-if len(Storage.field) >= 2:
-    print('\n', player1.name, ', enter coordinates ship (2 cell)')
+# Enter coordinates all ship - [][]
+i = 1
+while i <= max_ship2:
+    print('\n\n', player1.name, ', enter coordinates ship (2 cell)')
     while True:
         print('\nEnter 1 cell ship')
         ship_coo = user_input_coo_ship()
@@ -76,7 +113,8 @@ if len(Storage.field) >= 2:
             else:
                 # Write map with ship(1.2 cell) in player1 storage
                 Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
-                ship2_player1 = Ship(ship_coo, 2)  # Init player1 ship(1cell)
+                n = 2.0
+                ship2_player1 = Ship(ship_coo, n)  # Init player1 ship(1cell)
                 # ship2_player1.write_ship()  # Write ship(2.1cell) in player1 storage
                 flag = 0
                 while flag == 0:
@@ -87,13 +125,15 @@ if len(Storage.field) >= 2:
                     else:
                         if check_build_ship_logic(ship_coo, 2, 2) == False:
                             print('Ship is not build! Enter again!')
-                        else:
                             if isinstance(ship_coo, list):
                                 # Add ship(2.2cell) in player1 storage
                                 ship2_player1.size[2].append([ship_coo[0], ship_coo[1]])
                                 # Write map with ship(2.2 cell) in player1 storage
                                 Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
-                                break
+                                n += 0.1
+                                i += 1
+                        else:
+                            pass
         else:
             print('Enter again!')
 

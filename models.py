@@ -33,6 +33,18 @@ class Storage(object):
     def add_shot_player1(value):
         Storage.shot_player1.append(value)
 
+    @staticmethod
+    def add_players2(key, value):
+        Storage.players[key] = value
+
+    @staticmethod
+    def add_ship_player2(key, size):
+        Storage.ship_player1[key] = size
+
+    @staticmethod
+    def add_shot_player2(value):
+        Storage.shot_player1.append(value)
+
 
 class Player(object):
 
@@ -69,6 +81,9 @@ class Ship(object):
     def write_ship(self):
         Storage.add_ship_player1(self.key, self.size)
 
+    def write_ship2(self):
+        Storage.add_ship_player2(self.key, self.size)
+
 
 class Shot(object):
     def __init__(self, x, y):
@@ -90,7 +105,7 @@ def check_busy(size, number_player):
 
 
 def check_build_ship_logic(size, key_ship, number_part_ship):
-    if number_player == 1:
+    if number_part_ship == 1:
         if Storage.field_player1[0]:
             return False
         else:

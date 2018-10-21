@@ -17,8 +17,14 @@ def user_input_coo_field():
             if int(coo_x) < 3:
                 print('Enter number X > 3')
                 break
+            elif int(coo_x) > 10:
+                print('Max field size - 10x10.')
+                break
             elif int(coo_y) <= 0:
                 print('Enter number Y > 0')
+                break
+            elif int(coo_y) > 10:
+                print('Max field size - 10x10.')
                 break
             else:
                 value3 = [coo_x, coo_y]
