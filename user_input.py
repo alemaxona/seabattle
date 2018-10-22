@@ -1,8 +1,8 @@
 __author__ = 'alemaxona'
 
-'''
+"""
 user_input.py - Functions inputs users 
-'''
+"""
 
 from models import Storage
 

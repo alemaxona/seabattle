@@ -1,25 +1,24 @@
 __author__ = 'alemaxona'
 
-'''
+"""
 models.py - Classes objects game | Классы объектов игры.
-'''
+"""
 
 
 class Storage(object):
 
-    '''Players data storage. | Хранилище данных игроков.'''
+    """
+    Players data storage. | Хранилище данных игроков.
+    """
 
     field = []
-
     players = {}
+    field_players = {}
 
-    field_player1 = []
     ship_player1 = {}
-    shot_player1 = []
-
-    field_player2 = []
     ship_player2 = {}
-    shot_player2 = []
+
+    shots_players = {}
 
     @staticmethod
     def add_players(key, value):
@@ -30,59 +29,63 @@ class Storage(object):
         Storage.ship_player1[key] = size
 
     @staticmethod
-    def add_shot_player1(value):
-        Storage.shot_player1.append(value)
-
-    @staticmethod
-    def add_players2(key, value):
-        Storage.players[key] = value
-
-    @staticmethod
     def add_ship_player2(key, size):
         Storage.ship_player1[key] = size
-
-    @staticmethod
-    def add_shot_player2(value):
-        Storage.shot_player1.append(value)
 
 
 class Player(object):
 
-    '''Gamers in game only two. | Количество игроков в игре - 2.'''
+    """
+    Gamers in game only two. | Количество игроков в игре - 2.
+
+    Add two players and record their fields.
+    """
 
     def __init__(self, name, queue):
         self.name = name
         self.queue = queue
         Storage.add_players(queue, name)
 
+    def write_field_to_storage_players(self):
+        Storage.field_players[self.queue] = Storage.field.copy()
+
 
 class Field(object):
 
-    '''Game field generator | Генератор карты игры.'''
+    """
+    Game field generator | Генератор карты игры.
 
-    def __init__(self, size, size2):
-        self.size = size
-        self.size2 = size2
+    Generic field game.
+    """
+
+    def __init__(self, size):
+        self.size = size[0]
+        self.size2 = size[1]
         self.result = None
 
     def init_field(self):
-        # Используем генератор.
+        # Use generator. | Используем генератор.
         self.result = [['*'] * self.size for i in range(self.size2)]
         # self.result = [['*' for j in range(self.size)] for i in range(self.size2)]  # ПРАВИЛЬНО!
         # self.size = [list(i) * int(self.size) for i in self.mark] * int(self.size2)  # НЕПРАВИЛЬНО!
         return self.result
 
+    def write_field_to_storage(self):
+        Storage.field = self.result.copy()
 
+
+# !!!
 class Ship(object):
-    def __init__(self, size, key):
+    def __init__(self, size, key, obj_player):
         self.size = [size]
         self.key = key
+        self.player = obj_player.queue
 
     def write_ship(self):
-        Storage.add_ship_player1(self.key, self.size)
-
-    def write_ship2(self):
-        Storage.add_ship_player2(self.key, self.size)
+        if self.player == 0:
+            Storage.add_ship_player1(self.key, self.size)
+        else:
+            Storage.add_ship_player2(self.key, self.size)
 
 
 class Shot(object):
@@ -91,25 +94,45 @@ class Shot(object):
         self.y = y
 
 
-def check_busy(size, number_player):
-    if number_player == 1:
-        if Storage.field_player1[size[0]][size[1]] != '*':
-            return False
-        else:
-            return True
-    else:
-        if Storage.field_player2[size[0]][size[1]] != '*':
+def check_busy(size, obj_player):
+        if Storage.field_players[obj_player.queue][size[0]][size[1]] != '*':
             return False
         else:
             return True
 
 
-def check_build_ship_logic(size, key_ship, number_part_ship):
-    if number_part_ship == 1:
-        if Storage.field_player1[0]:
-            return False
-        else:
-            return True
+def check_max_ships_for_field():
+
+    """
+    Summing field cells for check the number of ships
+    """
+
+    sum_cell = len(Storage.field[0]) * len(Storage.field[1])
+    if sum_cell <= 20:
+        max_ship1 = 1
+        max_ship2 = 0
+        max_ship3 = 0
+        max_ship4 = 0
+    elif sum_cell >= 21 and sum_cell <= 30:
+        max_ship1 = 2
+        max_ship2 = 1
+        max_ship3 = 1
+        max_ship4 = 0
+    elif sum_cell >= 31 and sum_cell <= 50:
+        max_ship1 = 3
+        max_ship2 = 2
+        max_ship3 = 1
+        max_ship4 = 0
+    elif sum_cell >= 51 and sum_cell <= 100:
+        max_ship1 = 4
+        max_ship2 = 3
+        max_ship3 = 2
+        max_ship4 = 1
+    return [max_ship1, max_ship2, max_ship3, max_ship4]
+
+
+def check_build_ship_logic():
+    pass
 
 
 # s = Storage
