@@ -1,7 +1,7 @@
 __author__ = 'alemaxona'
 
 """
-user_input.py - Functions inputs users 
+user_input.py - Functions inputs users
 """
 
 from models import Storage
@@ -10,7 +10,7 @@ from models import Storage
 def user_input_coo_field():
     while True:
         try:
-            x = input('X = ')
+            x = input('\nX = ')
             y = input('Y = ')
             coo_x = int(x)
             coo_y = int(y)

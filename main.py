@@ -4,7 +4,7 @@ __author__ = 'alemaxona'
 main.py - Game logic
 '''
 
-
+from random import randint
 from models import Field, Player, Ship, Storage, \
     check_busy, \
     check_build_ship_logic, \
@@ -44,8 +44,8 @@ field.write_field_to_storage()
 
 
 # Write fields in players storage
-player1.write_field_to_storage_players()
-player2.write_field_to_storage_players()
+field.write_field_to_storage_players(player1)
+field.write_field_to_storage_players(player2)
 
 
 # Show clean field
@@ -63,35 +63,39 @@ print('\nMaximum ships: '
       '\nFour deck ship -', max_ships[3])
 
 
-# Show player1 Storage
-print('\nNames:', Storage.players,
-      '\nFields:', Storage.field_players,
-      '\nShips', Storage.ship_player1,
-      '\nShots', Storage.shots_players)
+# Random chose queue players!
+# QUEUE = randint(player1.queue, player2.queue)
+# print('QUEUE -', QUEUE)
 
 
-# ship1_player1 = Ship(ship_coo, n, player1)  # Сначала определить, потом добавлять!
+# Create lists objects ships1 players
+objects_ship1_player1 = [Ship(player1) for i in range(max_ships[0])]
+objects_ship1_player2 = [Ship(player1) for i in range(max_ships[0])]
+
+
 # Enter coordinates all ships - []
 print('\n', player1.name, ', enter coordinates ships (1 cell)')
 i = 1
+n = 1.0
 while i <= max_ships[0]:
         ship_coo = user_input_coo_ship()
         if isinstance(ship_coo, list):
             if check_busy(ship_coo, player1) == False:  # Check cell for busy
                 print('Cell is busy! Enter coo again.')
             else:
-                n = 1.0
-                Storage.field_players[player1.queue][ship_coo[0]][ship_coo[1]] = '[]'  # Write map with ship(1 cell) in player1 storage
-                ship1_player1 = Ship(ship_coo, n, player1)  # Init player1 ship(1cell)
-                ship1_player1.write_ship()  # Write ship(1cell) in player1 storage
+              # -->  Storage.field_players[player1.queue][ship_coo[0]][ship_coo[1]] = '[]'  # Write map with ship(1 cell) in player1 storage
+                objects_ship1_player1[i - 1].write_ship(n, ship_coo)  # Add ships in storage
                 n += 0.1
+                n = round(n, 1)  # Округление
                 i += 1
 
+
 # Show player1 Storage
-print('\nName:', Storage.players,
-      '\nField:', Storage.field_players,
-      '\nShips', Storage.ship_player1,
-      '\nShots', Storage.shots_players)
+print('\nNames:', Storage.players,
+      '\nFields player1:', Storage.field_players[player1.queue],
+      '\nFields player2:', Storage.field_players[player2.queue],
+      '\nShips player1', Storage.ships_player1,
+      '\nShots', Storage.shots_players, '\n')
 
 
 for i in Storage.field_players[player1.queue]:  # Show map player1 with ship/s
@@ -129,6 +133,7 @@ while i <= max_ships[1]:
                                 # Write map with ship(2.2 cell) in player1 storage
                                 Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
                                 n += 0.1
+                                n = round(n, 1)  # Округление дробного числа
                                 i += 1
                         else:
                             pass
@@ -140,13 +145,6 @@ for i in Storage.field_players[player1.queue]:  # Show map player1 with ship/s
     print(i)
 
 
-# Show player1 Storage
-print('\nName:', Storage.players,
-      '\nField:', Storage.field_players,
-      '\nShips', Storage.ship_player1,
-      '\nShots', Storage.shots_players)
-
-
 '''All objects:'''
 
 # player1
@@ -154,5 +152,5 @@ print('\nName:', Storage.players,
 
 # field
 
-# ship1_player1
+# ships1_player1
 # ship2_player1

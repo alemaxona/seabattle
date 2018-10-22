@@ -15,8 +15,8 @@ class Storage(object):
     players = {}
     field_players = {}
 
-    ship_player1 = {}
-    ship_player2 = {}
+    ships_player1 = {}
+    ships_player2 = {}
 
     shots_players = {}
 
@@ -25,12 +25,12 @@ class Storage(object):
         Storage.players[key] = value
 
     @staticmethod
-    def add_ship_player1(key, size):
-        Storage.ship_player1[key] = size
+    def add_ship_player1(ship, coo):
+        Storage.ships_player1[ship] = coo
 
     @staticmethod
     def add_ship_player2(key, size):
-        Storage.ship_player1[key] = size
+        Storage.ships_player1[key] = size
 
 
 class Player(object):
@@ -38,16 +38,13 @@ class Player(object):
     """
     Gamers in game only two. | Количество игроков в игре - 2.
 
-    Add two players and record their fields.
+    Add players and write their in storage.
     """
 
     def __init__(self, name, queue):
         self.name = name
         self.queue = queue
         Storage.add_players(queue, name)
-
-    def write_field_to_storage_players(self):
-        Storage.field_players[self.queue] = Storage.field.copy()
 
 
 class Field(object):
@@ -73,19 +70,19 @@ class Field(object):
     def write_field_to_storage(self):
         Storage.field = self.result.copy()
 
+    def write_field_to_storage_players(self, obj):
+        Storage.field_players[obj.queue] = self.result.copy()
 
-# !!!
+
 class Ship(object):
-    def __init__(self, size, key, obj_player):
-        self.size = [size]
-        self.key = key
+    def __init__(self, obj_player):
         self.player = obj_player.queue
 
-    def write_ship(self):
+    def write_ship(self, key, coo_ships):
         if self.player == 0:
-            Storage.add_ship_player1(self.key, self.size)
+            Storage.add_ship_player1(key, coo_ships)
         else:
-            Storage.add_ship_player2(self.key, self.size)
+            Storage.add_ship_player2(key, coo_ships)
 
 
 class Shot(object):
@@ -152,3 +149,10 @@ def check_build_ship_logic():
 # x = Ship([0, 0], 1)
 # x.write_ship()
 # print(Storage.ship_player1)
+
+
+# print(Storage.field_players)
+# Storage.field_players = {0: [['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*']], 1: [['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*']]}
+# print(Storage.field_players)
+# Storage.field_players[0][0][1] = '[]'
+# print(Storage.field_players)
