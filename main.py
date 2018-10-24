@@ -7,8 +7,8 @@ main.py - Game logic
 from random import randint
 from models import Field, Player, Ship, Storage, \
     check_busy, \
-    check_build_ship_logic, \
-    check_max_ships_for_field
+    check_max_ships_for_field, \
+    ship_connection_check
 from user_input import user_input_coo_ship, user_input_coo_field
 
 
@@ -56,39 +56,84 @@ for i in field.result:
 
 # Show max number of ships for this field
 max_ships = check_max_ships_for_field()
-print('\nMaximum ships: '
-      '\nSingle deck ship -', max_ships[0],
-      '\nTwo deck ship -', max_ships[1],
-      '\nThree deck ship -', max_ships[2],
-      '\nFour deck ship -', max_ships[3])
+print('\nMaximum ships for this field size: '
+      '\nSingle deck ship -', max_ships[0])
+if max_ships[1] != 0:
+    print('Two deck ship -', max_ships[1])
+if max_ships[2] != 0:
+    print('Three deck ship -', max_ships[2])
+if max_ships[3] != 0:
+    print('Four deck ship -', max_ships[3])
 
 
 # Random chose queue players!
-# QUEUE = randint(player1.queue, player2.queue)
-# print('QUEUE -', QUEUE)
+QUEUE = randint(player1.queue, player2.queue)
 
 
-# Create lists objects ships1 players
+# Create lists objects ships players / ЗАЧЕМ?
 objects_ship1_player1 = [Ship(player1) for i in range(max_ships[0])]
-objects_ship1_player2 = [Ship(player1) for i in range(max_ships[0])]
+objects_ship1_player2 = [Ship(player2) for i in range(max_ships[0])]
+objects_ship2_player1 = [Ship(player1) for i in range(max_ships[1])]
+objects_ship2_player2 = [Ship(player2) for i in range(max_ships[1])]
+objects_ship3_player1 = [Ship(player1) for i in range(max_ships[2])]
+objects_ship3_player2 = [Ship(player2) for i in range(max_ships[2])]
+objects_ship4_player1 = [Ship(player1) for i in range(max_ships[3])]
+objects_ship4_player2 = [Ship(player2) for i in range(max_ships[3])]
 
 
-# Enter coordinates all ships - []
-print('\n', player1.name, ', enter coordinates ships (1 cell)')
+# Enter coordinates all single deck ships - []
 i = 1
 n = 1.0
 while i <= max_ships[0]:
-        ship_coo = user_input_coo_ship()
-        if isinstance(ship_coo, list):
-            if check_busy(ship_coo, player1) == False:  # Check cell for busy
-                print('Cell is busy! Enter coo again.')
-            else:
-              # -->  Storage.field_players[player1.queue][ship_coo[0]][ship_coo[1]] = '[]'  # Write map with ship(1 cell) in player1 storage
-                objects_ship1_player1[i - 1].write_ship(n, ship_coo)  # Add ships in storage
+    print('\n', player1.name, ', enter coordinates single deck ship (1 cell)')
+    ship_coo = user_input_coo_ship()
+    if isinstance(ship_coo, list):
+        if check_busy(ship_coo, player1) == 0:  # Check cell for busy
+            print('Place is busy! Enter coordinates again.')
+        else:
+            # Write map with single ships to player1 storage
+            Storage.field_players[player1.queue][ship_coo[0]][ship_coo[1]] = '[1]'
+            objects_ship1_player1[i - 1].write_ship(n, ship_coo)  # Add ships in storage
+            print('\n', end='')
+            for row in Storage.field_players[player1.queue]:  # Show map player1 with ship/s
+                print(row)
+            n += 0.1
+            n = round(n, 1)  # Округление
+            i += 1
+
+
+# Enter coordinates all two deck ships - [][]
+i = 1
+n = 2.0
+while i <= max_ships[1]:
+    print('\n', player1.name, ', enter coordinates two deck ships (2 cell))')
+    print('Enter coordinates 1/2 ship')
+    ship_coo = user_input_coo_ship()
+    ship_coo2 = user_input_coo_ship()
+    if isinstance(ship_coo, list) and isinstance(ship_coo2, list):
+        if check_busy(ship_coo, player1) == 0 and check_busy(ship_coo2, player1) == 0:  # Check cell for busy
+            print('Cell is busy! Enter coo again.')
+            print('\n', end='')
+            for row in Storage.field_players[player1.queue]:  # Show map player1 with ship/s
+                print(row)
+        else:
+            if ship_connection_check([ship_coo, ship_coo2]) == 1:
+                print([ship_coo, ship_coo2])
+                # Write map with two ships to player1 storage
+                Storage.field_players[player1.queue][ship_coo[0]][ship_coo[1]] = '[2]'
+                Storage.field_players[player1.queue][ship_coo2[0]][ship_coo2[1]] = '[2]'
+                objects_ship2_player1[i - 1].write_ship(n, [ship_coo, ship_coo2])  # Add ships in storage
+                print('\n', end='')
+                for row in Storage.field_players[player1.queue]:  # Show map player1 with ship/s
+                    print(row)
                 n += 0.1
                 n = round(n, 1)  # Округление
                 i += 1
-
+            else:
+                print('Build ship error!')
+                print('\n', end='')
+                for row in Storage.field_players[player1.queue]:  # Show map player1 with ship/s
+                    print(row)
 
 # Show player1 Storage
 print('\nNames:', Storage.players,
@@ -98,53 +143,6 @@ print('\nNames:', Storage.players,
       '\nShots', Storage.shots_players, '\n')
 
 
-for i in Storage.field_players[player1.queue]:  # Show map player1 with ship/s
-    print(i)
-
-
-# Enter coordinates all ship - [][]
-i = 1
-while i <= max_ships[1]:
-    print('\n\n', player1.name, ', enter coordinates ship (2 cell)')
-    while True:
-        print('\nEnter 1 cell ship')
-        ship_coo = user_input_coo_ship()
-        if isinstance(ship_coo, list):
-            if check_busy(ship_coo, 1) == False:  # Check cell for busy
-                print('Cell is busy! Enter coo again.')
-            else:
-                # Write map with ship(1.2 cell) in player1 storage
-                Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
-                n = 2.0
-                ship2_player1 = Ship(ship_coo, n)  # Init player1 ship(1cell)
-                # ship2_player1.write_ship()  # Write ship(2.1cell) in player1 storage
-                flag = 0
-                while flag == 0:
-                    print('\nEnter 2 cell ship')
-                    ship_coo = user_input_coo_ship()
-                    if check_busy(ship_coo, 1) == False:  # Check cell for busy
-                        print('Cell is busy! Enter coo again.')
-                    else:
-                        if check_build_ship_logic(ship_coo, 2, 2) == False:
-                            print('Ship is not build! Enter again!')
-                            if isinstance(ship_coo, list):
-                                # Add ship(2.2cell) in player1 storage
-                                ship2_player1.size[2].append([ship_coo[0], ship_coo[1]])
-                                # Write map with ship(2.2 cell) in player1 storage
-                                Storage.field_player1[ship_coo[0]][ship_coo[1]] = '[]'
-                                n += 0.1
-                                n = round(n, 1)  # Округление дробного числа
-                                i += 1
-                        else:
-                            pass
-        else:
-            print('Enter again!')
-
-
-for i in Storage.field_players[player1.queue]:  # Show map player1 with ship/s
-    print(i)
-
-
 '''All objects:'''
 
 # player1
@@ -152,5 +150,11 @@ for i in Storage.field_players[player1.queue]:  # Show map player1 with ship/s
 
 # field
 
-# ships1_player1
-# ship2_player1
+# objects_ship1_player1
+# objects_ship1_player2
+# objects_ship2_player1
+# objects_ship2_player2
+# objects_ship3_player1
+# objects_ship3_player2
+# objects_ship4_player1
+# objects_ship4_player2

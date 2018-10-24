@@ -4,6 +4,8 @@ __author__ = 'alemaxona'
 models.py - Classes objects game | Классы объектов игры.
 """
 
+from copy import deepcopy
+
 
 class Storage(object):
 
@@ -62,23 +64,25 @@ class Field(object):
 
     def init_field(self):
         # Use generator. | Используем генератор.
-        self.result = [['*'] * self.size for i in range(self.size2)]
+        self.result = [[' * '] * self.size for i in range(self.size2)]
         # self.result = [['*' for j in range(self.size)] for i in range(self.size2)]  # ПРАВИЛЬНО!
         # self.size = [list(i) * int(self.size) for i in self.mark] * int(self.size2)  # НЕПРАВИЛЬНО!
         return self.result
 
     def write_field_to_storage(self):
-        Storage.field = self.result.copy()
+        Storage.field = deepcopy(self.result)
 
     def write_field_to_storage_players(self, obj):
-        Storage.field_players[obj.queue] = self.result.copy()
+        Storage.field_players[obj.queue] = deepcopy(self.result)
 
 
 class Ship(object):
     def __init__(self, obj_player):
         self.player = obj_player.queue
+        self.coo = None
 
     def write_ship(self, key, coo_ships):
+        self.coo = coo_ships
         if self.player == 0:
             Storage.add_ship_player1(key, coo_ships)
         else:
@@ -92,10 +96,40 @@ class Shot(object):
 
 
 def check_busy(size, obj_player):
-        if Storage.field_players[obj_player.queue][size[0]][size[1]] != '*':
-            return False
+
+    """
+    Check cell to free on players fields.
+
+    If '*' - free.
+    """
+    if Storage.field_players[obj_player.queue][size[0]][size[1]] == ' * ':
+        return 1
+    else:
+        if Storage.field_players[obj_player.queue][size[0]][size[1]] == '[1]' or \
+                Storage.field_players[obj_player.queue][size[0]][size[1]] == '[2]' or \
+                Storage.field_players[obj_player.queue][size[0]][size[1]] == '[3]' or \
+                Storage.field_players[obj_player.queue][size[0]][size[1]] == '[4]':
+            return 0
+
+
+# r = Field([3, 6])
+# r.init_field()
+# r.write_field_to_storage()
+# print(Storage.field)
+# print(len(Storage.field))
+
+
+# size = [[0, 1], [1, 1]] or [[], [], []] or [[], [] ,[], []]
+def ship_connection_check(coo):
+    if len(coo) == 2:
+        a = coo[0][0]  # [[*, ], [ , ]]
+        b = coo[0][1]  # [[ ,*], [ , ]]
+        c = coo[1][0]  # [[ , ], [*, ]]
+        d = coo[1][1]  # [[ , ], [ ,*]]
+        if (a == c and b + 1 == d) or (a - 1 == c and b == d) or (a + 1 == c and b == d) or (a == c and b - 1 == d):
+            return 1
         else:
-            return True
+            return 0
 
 
 def check_max_ships_for_field():
@@ -104,32 +138,40 @@ def check_max_ships_for_field():
     Summing field cells for check the number of ships
     """
 
-    sum_cell = len(Storage.field[0]) * len(Storage.field[1])
-    if sum_cell <= 20:
+    if len(Storage.field) == 1:
         max_ship1 = 1
         max_ship2 = 0
         max_ship3 = 0
         max_ship4 = 0
-    elif sum_cell >= 21 and sum_cell <= 30:
-        max_ship1 = 2
-        max_ship2 = 1
-        max_ship3 = 1
-        max_ship4 = 0
-    elif sum_cell >= 31 and sum_cell <= 50:
-        max_ship1 = 3
-        max_ship2 = 2
-        max_ship3 = 1
-        max_ship4 = 0
-    elif sum_cell >= 51 and sum_cell <= 100:
-        max_ship1 = 4
-        max_ship2 = 3
-        max_ship3 = 2
-        max_ship4 = 1
-    return [max_ship1, max_ship2, max_ship3, max_ship4]
-
-
-def check_build_ship_logic():
-    pass
+        return [max_ship1, max_ship2, max_ship3, max_ship4]
+    else:
+        sum_cell = len(Storage.field[0]) * len(Storage.field[1])
+        if sum_cell <= 9:
+            max_ship1 = 1
+            max_ship2 = 0
+            max_ship3 = 0
+            max_ship4 = 0
+        if (sum_cell >= 10) and (sum_cell <= 20):
+            max_ship1 = 2
+            max_ship2 = 0
+            max_ship3 = 0
+            max_ship4 = 0
+        elif (sum_cell >= 21) and (sum_cell <= 30):
+            max_ship1 = 2
+            max_ship2 = 1
+            max_ship3 = 1
+            max_ship4 = 0
+        elif (sum_cell >= 31) and (sum_cell <= 50):
+            max_ship1 = 3
+            max_ship2 = 2
+            max_ship3 = 1
+            max_ship4 = 0
+        elif (sum_cell >= 51) and (sum_cell <= 100):
+            max_ship1 = 4
+            max_ship2 = 3
+            max_ship3 = 2
+            max_ship4 = 1
+        return [max_ship1, max_ship2, max_ship3, max_ship4]
 
 
 # s = Storage
@@ -149,10 +191,10 @@ def check_build_ship_logic():
 # x = Ship([0, 0], 1)
 # x.write_ship()
 # print(Storage.ship_player1)
-
-
-# print(Storage.field_players)
-# Storage.field_players = {0: [['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*']], 1: [['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*'], ['*', '*', '*', '*', '*']]}
-# print(Storage.field_players)
-# Storage.field_players[0][0][1] = '[]'
-# print(Storage.field_players)
+#
+#
+# x = [0, 1]
+# if Storage.field_players[0][x[0]][x[1]] == '[]':
+#     print('true')
+# else:
+#     print('False')
