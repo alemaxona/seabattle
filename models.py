@@ -104,22 +104,14 @@ def check_busy(size, obj_player):
     """
     if Storage.field_players[obj_player.queue][size[0]][size[1]] == ' * ':
         return 1
-    else:
-        if Storage.field_players[obj_player.queue][size[0]][size[1]] == '[1]' or \
-                Storage.field_players[obj_player.queue][size[0]][size[1]] == '[2]' or \
-                Storage.field_players[obj_player.queue][size[0]][size[1]] == '[3]' or \
-                Storage.field_players[obj_player.queue][size[0]][size[1]] == '[4]':
-            return 0
+    elif Storage.field_players[obj_player.queue][size[0]][size[1]] == '[1]' or \
+            Storage.field_players[obj_player.queue][size[0]][size[1]] == '[2]' or \
+            Storage.field_players[obj_player.queue][size[0]][size[1]] == '[3]' or \
+            Storage.field_players[obj_player.queue][size[0]][size[1]] == '[4]':
+        return 0
 
 
-# r = Field([3, 6])
-# r.init_field()
-# r.write_field_to_storage()
-# print(Storage.field)
-# print(len(Storage.field))
-
-
-# size = [[0, 1], [1, 1]] or [[], [], []] or [[], [] ,[], []]
+# size = [[,], [,]] or [[,], [,], [,]] or [[,], [,] ,[,], [,]]
 def ship_connection_check(coo):
     if len(coo) == 2:
         a = coo[0][0]  # [[*, ], [ , ]]
@@ -127,6 +119,38 @@ def ship_connection_check(coo):
         c = coo[1][0]  # [[ , ], [*, ]]
         d = coo[1][1]  # [[ , ], [ ,*]]
         if (a == c and b + 1 == d) or (a - 1 == c and b == d) or (a + 1 == c and b == d) or (a == c and b - 1 == d):
+            return 1
+        else:
+            return 0
+    elif len(coo) == 3:
+        a = coo[0][0]  # [[*, ], [ , ]]
+        b = coo[0][1]  # [[ ,*], [ , ]]
+        c = coo[1][0]  # [[ , ], [*, ]]
+        d = coo[1][1]  # [[ , ], [ ,*]]
+        e = coo[2][0]  # [[ , ], [ , ], [*, ]]
+        f = coo[2][1]  # [[ , ], [ , ], [ ,*]]
+        if ((a == c and b + 1 == d) or
+            (a - 1 == c and b == d) or
+            (a + 1 == c and b == d) or
+            (a == c and b - 1 == d)) and \
+                (b == d == f or a == c == e):
+            return 1
+        else:
+            return 0
+    elif len(coo) == 4:
+        a = coo[0][0]  # [[*, ], [ , ]]
+        b = coo[0][1]  # [[ ,*], [ , ]]
+        c = coo[1][0]  # [[ , ], [*, ]]
+        d = coo[1][1]  # [[ , ], [ ,*]]
+        e = coo[2][0]  # [[ , ], [ , ], [*, ]]
+        f = coo[2][1]  # [[ , ], [ , ], [ ,*]]
+        g = coo[3][0]  # [[ , ], [ , ], [ , ], [*, ]]
+        h = coo[3][1]  # [[ , ], [ , ], [ , ], [ ,*]]
+        if ((a == c and b + 1 == d) or
+            (a - 1 == c and b == d) or
+            (a + 1 == c and b == d) or
+            (a == c and b - 1 == d)) and \
+                (b == d == f == h or a == c == e == g):
             return 1
         else:
             return 0
