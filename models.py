@@ -16,23 +16,16 @@ class Storage(object):
     field = []
     players = {}
     field_players = {}
+    shots_field_players = {}
 
-    ships_player1 = {}
-    ships_player2 = {}
+    # ships_player1 = {}
+    # ships_player2 = {}
 
     shots_players = {}
 
     @staticmethod
     def add_players(key, value):
         Storage.players[key] = value
-
-    @staticmethod
-    def add_ship_player1(ship, coo):
-        Storage.ships_player1[ship] = coo
-
-    @staticmethod
-    def add_ship_player2(key, size):
-        Storage.ships_player1[key] = size
 
 
 class Player(object):
@@ -75,24 +68,14 @@ class Field(object):
     def write_field_to_storage_players(self, obj):
         Storage.field_players[obj.queue] = deepcopy(self.result)
 
+    def write_shots_to_storage_players(self, obj):
+        Storage.shots_field_players[obj.queue] = deepcopy(self.result)
+
 
 class Ship(object):
     def __init__(self, obj_player):
         self.player = obj_player.queue
         self.coo = None
-
-    def write_ship(self, key, coo_ships):
-        self.coo = coo_ships
-        if self.player == 0:
-            Storage.add_ship_player1(key, coo_ships)
-        else:
-            Storage.add_ship_player2(key, coo_ships)
-
-
-class Shot(object):
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
 
 
 def check_busy(size, obj_player):
@@ -198,27 +181,21 @@ def check_max_ships_for_field():
         return [max_ship1, max_ship2, max_ship3, max_ship4]
 
 
-# s = Storage
-# s.add_shot([2,3])
-# s.add_shot([3,3])
-# print(s.shot)
-#
-# s1 = Storage
-# print(s1.shot)
-#
-#
-# field = Field(5, 5)
-# field.init_field()
-# for i in field.result:
-#     print(i)
-#
-# x = Ship([0, 0], 1)
-# x.write_ship()
-# print(Storage.ship_player1)
-#
-#
-# x = [0, 1]
-# if Storage.field_players[0][x[0]][x[1]] == '[]':
-#     print('true')
-# else:
-#     print('False')
+def check_hit_shot(coo, obj):
+    if Storage.field_players[obj.queue][coo[0]][coo[1]] == ' * ':
+        # print('Slip')
+        return 0
+    elif Storage.field_players[obj.queue][coo[0]][coo[1]] == '[1]':
+        # print('Kill')
+        return 1
+    elif Storage.field_players[obj.queue][coo[0]][coo[1]] == '[2]':
+        # print('Kill')
+        return 2
+
+
+def check_ships(obj):
+    for row in Storage.field_players[obj.queue]:
+        if '[1]' in row:
+            return 1
+        else:
+            return 0
