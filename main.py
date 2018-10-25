@@ -5,14 +5,16 @@ main.py - Game logic
 '''
 
 from random import randint
-from models import Field, Player, Ship, Storage, \
+from models import Field, Player, Storage, \
     check_busy, \
     check_max_ships_for_field, \
-    ship_connection_check
+    ship_connection_check,\
+    check_hit_shot,\
+    check_ships
 from user_input import user_input_coo_ship, user_input_coo_field
 
 
-print('\n+++SEABATTLE+++\n\n')
+print('\n*** SEABATTLE ***\n\n')
 game = 1
 while game == 1:
     answer = input('\nStart game? (Y/N): ')
@@ -44,17 +46,17 @@ while game == 1:
 
 
 # Show clean field
-            num_x = 1
-            print('\nFIELD')
-            for i in field.result:
-                print(num_x, i)
-                num_x += 1
+#             num_x = 1
+#             print('\nFIELD')
+#             for i in field.result:
+#                 print(num_x, i)
+#                 num_x += 1
 
-            # Init player1
+# Init player1
             player1 = Player(input('\nEnter name player1: '), 0)
             print('Welcome player', player1.name)
 
-            # Init player2
+# Init player2
             player2 = Player(input('\nEnter name player2: '), 1)
             if player2.name == player1.name:
                 player2.name = player2.name + '.2'
@@ -63,7 +65,7 @@ while game == 1:
                 print('Welcome player', player2.name)
 
 
-# Write fields in players storage
+# Write fields to players storage
             field.write_field_to_storage_players(player1)
             field.write_field_to_storage_players(player2)
 
@@ -82,20 +84,6 @@ while game == 1:
 
 # Random chose queue players!
             QUEUE = randint(player1.queue, player2.queue)
-            if QUEUE == player1.queue:
-                print('\nThe computer chose the player who will start first. It\'s -', player1.name)
-            else:
-                print('\nThe computer chose the player who will start first. It\'s -', player2.name)
-
-# Create lists objects ships players / ЗАЧЕМ?
-#             objects_ship1_player1 = [Ship(player1) for i in range(max_ships[0])]
-#             objects_ship1_player2 = [Ship(player2) for i in range(max_ships[0])]
-#             objects_ship2_player1 = [Ship(player1) for i in range(max_ships[1])]
-#             objects_ship2_player2 = [Ship(player2) for i in range(max_ships[1])]
-#             objects_ship3_player1 = [Ship(player1) for i in range(max_ships[2])]
-#             objects_ship3_player2 = [Ship(player2) for i in range(max_ships[2])]
-#             objects_ship4_player1 = [Ship(player1) for i in range(max_ships[3])]
-#             objects_ship4_player2 = [Ship(player2) for i in range(max_ships[3])]
 
 
 # Enter coordinates all single deck ships - []
@@ -120,7 +108,6 @@ while game == 1:
                         else:
                             # Write map with single ships to player1 storage
                             Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[1]'
-                            # objects_ship1_player1[i - 1].write_ship(n, ship_coo)  # Add ships in storage
                             print('\n', end='')
                             # num_y = [' * ' for i in range(len(Storage.field[0]))]
                             # print(' ', num_y)
@@ -155,7 +142,6 @@ while game == 1:
                                 # Write map with two ships to player1 storage
                                 Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[2]'
                                 Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[2]'
-                                # objects_ship2_player1[i - 1].write_ship(n, [ship_coo, ship_coo2])  # Add ships in storage
                                 print('\n', end='')
                                 num_x = 1
                                 for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
@@ -201,8 +187,6 @@ while game == 1:
                                 Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[3]'
                                 Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[3]'
                                 Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[3]'
-                                # Add ships in storage
-                                # objects_ship2_player1[i - 1].write_ship(n, [ship_coo, ship_coo2, ship_coo3])
                                 print('\n', end='')
                                 num_x = 1
                                 for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
@@ -255,8 +239,6 @@ while game == 1:
                                 Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[4]'
                                 Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[4]'
                                 Storage.field_players[player_obj.queue][ship_coo4[0]][ship_coo3[1]] = '[4]'
-                                # Add ships in storage
-                                # objects_ship2_player1[i - 1].write_ship(n, [ship_coo, ship_coo2, ship_coo3, ship_coo4])
                                 print('\n', end='')
                                 num_x = 1
                                 for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
@@ -273,19 +255,72 @@ while game == 1:
                                     print(num_x, row)
                                     num_x += 1
                                     # Второй проход цикла.
-                                    flag += 1
+                flag += 1
                 if QUEUE == 1:
                     QUEUE = 0
                 elif QUEUE == 0:
                     QUEUE = 1
+
+# Shots logic
+            print('\n\n*** Ships on the positions. Let the battle begin! ***')
+
+
+# Write fields for shots to players storage
+            field.write_shots_to_storage_players(player1)
+            field.write_shots_to_storage_players(player2)
+
+
+# Random chose queue players!
+            QUEUE = randint(player1.queue, player2.queue)
+            if QUEUE == player1.queue:
+                print('\n\nThe computer chose the player who will start first. It\'s -', player1.name)
+            else:
+                print('\n\nThe computer chose the player who will start first. It\'s -', player2.name)
+
+# Shots
+            while True:
+                if QUEUE == 0:
+                    player_obj = player1
+                    player_obj_reverse = player2
+                else:
+                    player_obj = player2
+                    player_obj_reverse = player1
+                print('\n', player_obj.name, ', enter coordinates your shot\n')
+                num_x = 1
+                for row in Storage.shots_field_players[player_obj.queue]:  # Show map player1 with ship/s
+                    print(num_x, row)
+                    num_x += 1
+                shot_coo = user_input_coo_ship()
+                if isinstance(shot_coo, list):
+                    # Hit check
+                    if check_hit_shot(shot_coo, player_obj_reverse) == 1:
+                        # Write shots to field reverse player
+                        Storage.field_players[player_obj_reverse.queue][shot_coo[0]][shot_coo[1]] = '[X]'
+                        # Write shots to shots field
+                        Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[X]'
+                        if check_ships(player_obj_reverse) == 0:
+                            print('\n***************')
+                            print('*** You win! ***')
+                            print('***************')
+                            break
+                    elif check_hit_shot(shot_coo, player_obj_reverse) == 0:
+                        Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[O]'
+                        print('Oh, You missed... ')
+                        if QUEUE == 0:
+                            QUEUE = 1
+                        elif QUEUE == 1:
+                            QUEUE = 0
+
+            print('\n******* WINNER ******* - ', player_obj.name)
 
 
 # Show player1 Storage
             print('\nNames:', Storage.players,
                   '\nFields player1:', Storage.field_players[player1.queue],
                   '\nFields player2:', Storage.field_players[player2.queue],
-                  '\nShips player1', Storage.ships_player1,
-                  '\nShots', Storage.shots_players, '\n')
+                  '\nShotsFields player1:', Storage.shots_field_players[player1.queue],
+                  '\nShotsFields player2:', Storage.shots_field_players[player2.queue],
+                  '\nShots', Storage.shots_field_players, '\n')
 
             answer = input('Do you want start new game? (Y/N) ')
             if answer.upper() == 'Y':
