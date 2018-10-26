@@ -1,7 +1,7 @@
 __author__ = 'alemaxona'
 
 """
-models.py - Classes objects game | Классы объектов игры.
+models.py - Classes, storage and functions for game | Классы, хранилище и функции игры.
 """
 
 from copy import deepcopy
@@ -17,21 +17,26 @@ class Storage(object):
     players = {}
     field_players = {}
     shots_field_players = {}
-
-    # ships_player1 = {}
-    # ships_player2 = {}
-
+    ships_player1 = []
+    ships_player2 = []
     shots_players = {}
 
     @staticmethod
     def add_players(key, value):
         Storage.players[key] = value
 
+    @staticmethod
+    def add_ships(ship, obj):
+        if obj.queue == 0:
+            Storage.ships_player1.append(ship)
+        elif obj.queue == 1:
+            Storage.ships_player2.append(ship)
+
 
 class Player(object):
 
     """
-    Gamers in game only two. | Количество игроков в игре - 2.
+    Gamers in game only two. | Класс - Игрок. Количество игроков в игре - 2.
 
     Add players and write their in storage.
     """
@@ -72,10 +77,10 @@ class Field(object):
         Storage.shots_field_players[obj.queue] = deepcopy(self.result)
 
 
-class Ship(object):
-    def __init__(self, obj_player):
-        self.player = obj_player.queue
-        self.coo = None
+# class Ship(object):
+#     def __init__(self, obj_player):
+#         self.player = obj_player.queue
+#         self.coo = None
 
 
 def check_busy(size, obj_player):
@@ -85,6 +90,7 @@ def check_busy(size, obj_player):
 
     If '*' - free.
     """
+
     if Storage.field_players[obj_player.queue][size[0]][size[1]] == ' * ':
         return 1
     elif Storage.field_players[obj_player.queue][size[0]][size[1]] == '[1]' or \
@@ -94,8 +100,14 @@ def check_busy(size, obj_player):
         return 0
 
 
-# size = [[,], [,]] or [[,], [,], [,]] or [[,], [,] ,[,], [,]]
 def ship_connection_check(coo):
+
+    """
+        The logic of building ships
+
+        size = [[,], [,]] or [[,], [,], [,]] or [[,], [,] ,[,], [,]]
+    """
+
     if len(coo) == 2:
         a = coo[0][0]  # [[*, ], [ , ]]
         b = coo[0][1]  # [[ ,*], [ , ]]
@@ -181,21 +193,82 @@ def check_max_ships_for_field():
         return [max_ship1, max_ship2, max_ship3, max_ship4]
 
 
+# 5X5 coo == [3, 3]
+# ['[1]', '[1]', ' * ', ' * ', ' * ']
+# ['[2]', '[2]', ' * ', ' * ', ' * ']
+# ['[3]', '[3]', '[3]', ' * ', ' * ']
+# [' * ', ' * ', ' * ', ' * ', ' * ']
+# [' * ', ' * ', ' * ', ' * ', ' * ']
 def check_hit_shot(coo, obj):
+
+    """
+    Check for hit shots in the ship.
+    """
+
+    result = []
+
+    # [2][3][4]
+    for row in Storage.field_players[obj.queue]:  # ТУТ!
+        if coo in row:
+            if '[2]' in row:
+                result.append(2)  # Ship hit
+            elif '[3]' in row:
+                result.append(2)  # Ship hit
+            elif '[4]' in row:
+                result.append(2)  # Ship hit
+        else:
+            result.append(1)
+    # [' * '][1]
     if Storage.field_players[obj.queue][coo[0]][coo[1]] == ' * ':
-        # print('Slip')
+        # Ship slip
         return 0
     elif Storage.field_players[obj.queue][coo[0]][coo[1]] == '[1]':
-        # print('Kill')
+        # Ship hit
         return 1
-    elif Storage.field_players[obj.queue][coo[0]][coo[1]] == '[2]':
-        # print('Kill')
-        return 2
+    else:
+        if 2 in result:
+            return 2
+        else:
+            return 1
+
+
+def check_repeat_shot(coo, obj):
+
+    """
+    Check for re-hit shots.
+    """
+
+    if Storage.shots_field_players[obj.queue][coo[0]][coo[1]] == '[O]' or\
+            Storage.shots_field_players[obj.queue][coo[0]][coo[1]] == '[X]':
+        return 1
+    else:
+        return 0
 
 
 def check_ships(obj):
+
+    """
+    Check for a ship on the field.
+    """
+
+    result = []
+
     for row in Storage.field_players[obj.queue]:
         if '[1]' in row:
-            return 1
+            result.append(1)
         else:
-            return 0
+            if '[2]' in row:
+                result.append(1)
+            else:
+                if '[3]' in row:
+                    result.append(1)
+                else:
+                    if '[4]' in row:
+                        result.append(1)
+                    else:
+                        result.append(0)
+
+    if 1 in result:
+        return 1  # If ships an field
+    else:
+        return 0  # If is not ships an field
