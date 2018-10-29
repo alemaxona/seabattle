@@ -63,8 +63,7 @@ class Field(object):
     def init_field(self):
         # Use generator. | Используем генератор.
         self.result = [[' * '] * self.size for i in range(self.size2)]
-        # self.result = [['*' for j in range(self.size)] for i in range(self.size2)]  # ПРАВИЛЬНО!
-        # self.size = [list(i) * int(self.size) for i in self.mark] * int(self.size2)  # НЕПРАВИЛЬНО!
+        # self.result = [['*' for j in range(self.size)] for i in range(self.size2)]
         return self.result
 
     def write_field_to_storage(self):
@@ -75,12 +74,6 @@ class Field(object):
 
     def write_shots_to_storage_players(self, obj):
         Storage.shots_field_players[obj.queue] = deepcopy(self.result)
-
-
-# class Ship(object):
-#     def __init__(self, obj_player):
-#         self.player = obj_player.queue
-#         self.coo = None
 
 
 def check_busy(size, obj_player):
@@ -172,7 +165,7 @@ def check_max_ships_for_field():
             max_ship4 = 0
         if (sum_cell >= 10) and (sum_cell <= 20):
             max_ship1 = 2
-            max_ship2 = 0
+            max_ship2 = 1
             max_ship3 = 0
             max_ship4 = 0
         elif (sum_cell >= 21) and (sum_cell <= 30):
@@ -193,43 +186,53 @@ def check_max_ships_for_field():
         return [max_ship1, max_ship2, max_ship3, max_ship4]
 
 
-# 5X5 coo == [3, 3]
-# ['[1]', '[1]', ' * ', ' * ', ' * ']
-# ['[2]', '[2]', ' * ', ' * ', ' * ']
-# ['[3]', '[3]', '[3]', ' * ', ' * ']
-# [' * ', ' * ', ' * ', ' * ', ' * ']
-# [' * ', ' * ', ' * ', ' * ', ' * ']
 def check_hit_shot(coo, obj):
 
     """
     Check for hit shots in the ship.
     """
 
-    result = []
-
-    # [2][3][4]
-    for row in Storage.field_players[obj.queue]:  # ТУТ!
-        if coo in row:
-            if '[2]' in row:
-                result.append(2)  # Ship hit
-            elif '[3]' in row:
-                result.append(2)  # Ship hit
-            elif '[4]' in row:
-                result.append(2)  # Ship hit
-        else:
-            result.append(1)
+    shot = Storage.field_players[obj.queue][coo[0]][coo[1]]
     # [' * '][1]
-    if Storage.field_players[obj.queue][coo[0]][coo[1]] == ' * ':
+    if shot == ' * ':
         # Ship slip
         return 0
-    elif Storage.field_players[obj.queue][coo[0]][coo[1]] == '[1]':
+    elif shot == '[1]':
         # Ship hit
         return 1
-    else:
-        if 2 in result:
-            return 2
-        else:
+    # [2]
+    elif shot == '[2]':
+        i = 0
+        for row in Storage.field_players[obj.queue]:
+            for cell in row:
+                if cell == '[2]':
+                    i += 1
+        if i == 1:
             return 1
+        else:
+            return 2
+    # [3]
+    elif shot == '[3]':
+        i = 0
+        for row in Storage.field_players[obj.queue]:
+            for cell in row:
+                if cell == '[3]':
+                    i += 1
+        if i == 1:
+            return 1
+        else:
+            return 2
+    # [4]
+    elif shot == '[4]':
+        i = 0
+        for row in Storage.field_players[obj.queue]:
+            for cell in row:
+                if cell == '[4]':
+                    i += 1
+        if i == 1:
+            return 1
+        else:
+            return 2
 
 
 def check_repeat_shot(coo, obj):
