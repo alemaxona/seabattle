@@ -99,7 +99,7 @@ while game == 1:
                 while i <= max_ships[0]:
                     print('\n', player_obj.name, ', enter coordinates single deck ship (1 cell)\n')
                     num_x = 1
-                    for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
+                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                         print(num_x, row)
                         num_x += 1
                     ship_coo = user_input_coo_ship()
@@ -107,7 +107,7 @@ while game == 1:
                         if check_busy(ship_coo, player_obj) == 0:  # Check cell for busy
                             print('Place is busy! Enter coordinates again.')
                         else:
-                            # Write map with single ships to player1 storage
+                            # Write map with single ships to players storage
                             Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[1]'
                             # Add ship to storage
                             Storage.add_ships([ship_coo], player_obj)
@@ -115,7 +115,7 @@ while game == 1:
                             # num_y = [' * ' for i in range(len(Storage.field[0]))]
                             # print(' ', num_y)
                             num_x = 1
-                            for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
+                            for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                                 print(num_x, row)
                                 num_x += 1
                             n += 0.1
@@ -127,8 +127,12 @@ while game == 1:
                 i = 1
                 n = 2.0
                 while i <= max_ships[1]:
-                    print('\n', player_obj.name, ', enter coordinates two deck ships (2 cell))')
-                    print('Enter coordinates 1/2 ship')
+                    print('\n', player_obj.name, ', enter coordinates two deck ships (2 cell))\n')
+                    num_x = 1
+                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                        print(num_x, row)
+                        num_x += 1
+                    print('\nEnter coordinates 1/2 ship')
                     ship_coo = user_input_coo_ship()
                     print('Enter coordinates 1/2 ship')
                     ship_coo2 = user_input_coo_ship()
@@ -139,11 +143,11 @@ while game == 1:
                                     check_busy(ship_coo2, player_obj) == 0:  # Check cell for busy
                                 print('Cell is busy! Enter coo again.')
                                 print('\n', end='')
-                                for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
+                                for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                                     print(row)
                             else:
                                 if ship_connection_check([ship_coo, ship_coo2]) == 1:
-                                    # Write map with two ships to player1 storage
+                                    # Write map with two ships to players storage
                                     Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[2]'
                                     Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[2]'
                                     # Add ship to storage
@@ -171,8 +175,12 @@ while game == 1:
                 i = 1
                 n = 3.0
                 while i <= max_ships[2]:
-                    print('\n', player_obj.name, ', enter coordinates three deck ships (3 cell))')
-                    print('Enter coordinates 1/3 ship')
+                    print('\n', player_obj.name, ', enter coordinates three deck ships (3 cell))\n')
+                    num_x = 1
+                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                        print(num_x, row)
+                        num_x += 1
+                    print('\nEnter coordinates 1/3 ship')
                     ship_coo = user_input_coo_ship()
                     print('Enter coordinates 1/3 ship')
                     ship_coo2 = user_input_coo_ship()
@@ -187,12 +195,12 @@ while game == 1:
                                 print('Cell is busy! Enter coo again.')
                                 print('\n', end='')
                                 num_x = 1
-                                for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
+                                for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                                     print(num_x, row)
                                     num_x += 1
                             else:
                                 if ship_connection_check([ship_coo, ship_coo2, ship_coo3]) == 1:
-                                    # Write map with two ships to player1 storage
+                                    # Write map with two ships to players storage
                                     Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[3]'
                                     Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[3]'
                                     Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[3]'
@@ -200,7 +208,7 @@ while game == 1:
                                     Storage.add_ships([ship_coo, ship_coo2, ship_coo3], player_obj)
                                     print('\n', end='')
                                     num_x = 1
-                                    for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
+                                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                                         print(num_x, row)
                                         num_x += 1
                                     n += 0.1
@@ -210,7 +218,7 @@ while game == 1:
                                     print('Build ship error!')
                                     print('\n', end='')
                                     num_x = 1
-                                    for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
+                                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                                         print(num_x, row)
                                         num_x += 1
                         else:
@@ -221,8 +229,12 @@ while game == 1:
                 i = 1
                 n = 4.0
                 while i <= max_ships[3]:
-                    print('\n', player_obj.name, ', enter coordinates four deck ships (4 cell))')
-                    print('Enter coordinates 1/4 ship')
+                    print('\n', player_obj.name, ', enter coordinates four deck ships (4 cell))\n')
+                    num_x = 1
+                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                        print(num_x, row)
+                        num_x += 1
+                    print('\nEnter coordinates 1/4 ship')
                     ship_coo = user_input_coo_ship()
                     print('Enter coordinates 1/4 ship')
                     ship_coo2 = user_input_coo_ship()
@@ -246,12 +258,12 @@ while game == 1:
                                 print('Cell is busy! Enter coo again.')
                                 print('\n', end='')
                                 num_x = 1
-                                for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
+                                for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                                     print(num_x, row)
                                     num_x += 1
                             else:
                                 if ship_connection_check([ship_coo, ship_coo2, ship_coo3, ship_coo4]) == 1:
-                                    # Write map with two ships to player1 storage
+                                    # Write map with two ships to players storage
                                     Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[4]'
                                     Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[4]'
                                     Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[4]'
@@ -260,7 +272,7 @@ while game == 1:
                                     Storage.add_ships([ship_coo, ship_coo2, ship_coo3, ship_coo4], player_obj)
                                     print('\n', end='')
                                     num_x = 1
-                                    for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
+                                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                                         print(num_x, row)
                                         num_x += 1
                                     n += 0.1
@@ -270,10 +282,10 @@ while game == 1:
                                     print('Build ship error!')
                                     print('\n', end='')
                                     num_x = 1
-                                    for row in Storage.field_players[player_obj.queue]:  # Show map player1 with ship/s
+                                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                                         print(num_x, row)
                                         num_x += 1
-                                        # Второй проход цикла.
+                                        # Second cycle pass | Второй проход цикла.
                         else:
                             print('Build ship error! The coordinates of the parts of the ship must be unique!')
                 flag += 1
@@ -308,7 +320,7 @@ while game == 1:
                     player_obj_reverse = player1
                 print('\n', player_obj.name, ', enter coordinates your shot\n')
                 num_x = 1
-                for row in Storage.shots_field_players[player_obj.queue]:  # Show map player1 with ship/s
+                for row in Storage.shots_field_players[player_obj.queue]:  # Show map players with ship/s
                     print(num_x, row)
                     num_x += 1
                 shot_coo = user_input_coo_ship()
@@ -350,15 +362,18 @@ while game == 1:
             print('\n******* WINNER ******* - ', player_obj.name)
 
 
-# Show player1 Storage
-            print('\nNames:', Storage.players,
-                  '\nFields player1:', Storage.field_players[player1.queue],
-                  '\nFields player2:', Storage.field_players[player2.queue],
-                  '\nShips players:', Storage.ships_player1,
-                  '\nShips players:', Storage.ships_player2,
-                  '\nShotsFields player1:', Storage.shots_field_players[player1.queue],
-                  '\nShotsFields player2:', Storage.shots_field_players[player2.queue],
-                  '\nShots', Storage.shots_field_players, '\n')
+# Show stats
+            print('\nNames:', Storage.players[0],
+                  '\nShots:', Storage.ships_player1,
+                  '\nSlip shots:', Storage.ships_player2,
+                  '\nShot slip map:', Storage.shots_field_players[player1.queue],
+                  '\nShot hit map:', Storage.shots_field_players[player2.queue],)
+
+            print('\nNames:', Storage.players[1],
+                  '\nShots:', Storage.ships_player1,
+                  '\nSlip shots:', Storage.ships_player2,
+                  '\nShot slip map:', Storage.shots_field_players[player1.queue],
+                  '\nShot hit map:', Storage.shots_field_players[player2.queue],)
 
             answer = input('\nDo you want start new game? (Y/N) ')
             if answer.upper() == 'Y':
@@ -384,3 +399,13 @@ while game == 1:
 # objects_ship3_player2
 # objects_ship4_player1
 # objects_ship4_player2
+
+# Show players Storage
+#             print('\nNames:', Storage.players,
+#                   '\nFields player1:', Storage.field_players[player1.queue],
+#                   '\nFields player2:', Storage.field_players[player2.queue],
+#                   '\nShips players:', Storage.ships_player1,
+#                   '\nShips players:', Storage.ships_player2,
+#                   '\nShotsFields player1:', Storage.shots_field_players[player1.queue],
+#                   '\nShotsFields player2:', Storage.shots_field_players[player2.queue],
+#                   '\nShots', Storage.shots_field_players, '\n')
