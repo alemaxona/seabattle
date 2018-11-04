@@ -45,26 +45,27 @@ while game == 1:
             field.init_field()
             field.write_field_to_storage()
 
-
-# Show clean field
-#             num_x = 1
-#             print('\nFIELD')
-#             for i in field.result:
-#                 print(num_x, i)
-#                 num_x += 1
+# ROBOT
 
 # Init player1
-            player1 = Player(input('\nEnter name player1: '), 0)
+            print('\nYou can play against the robot. Enter “robot” for selection.')
+            player1 = Player(input('Enter name player1: '), 0)
             print('Welcome player', player1.name)
 
 # Init player2
-            player2 = Player(input('\nEnter name player2: '), 1)
+            print('\nYou can play against the robot. Enter “robot” for selection.')
+            player2 = Player(input('Enter name player2: '), 1)
             if player2.name == player1.name:
                 player2.name = player2.name + '.2'
                 print('Welcome player', player2.name)
             else:
                 print('Welcome player', player2.name)
 
+            # ROBOT
+            if player1.name.upper() == 'ROBOT':
+                ROBOT1 = 1
+            if player2.name.upper() == 'ROBOT' or player2.name.upper() == 'ROBOT.2':
+                ROBOT2 = 1
 
 # Write fields to players storage
             field.write_field_to_storage_players(player1)
