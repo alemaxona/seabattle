@@ -44,7 +44,12 @@ class Player(object):
     def __init__(self, name, queue):
         self.name = name
         self.queue = queue
+
         Storage.add_players(queue, name)
+
+        # Stats
+        self.number_of_shots = 0
+        self.target_shots = 0
 
 
 class Field(object):

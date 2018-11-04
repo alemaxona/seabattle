@@ -325,6 +325,8 @@ while game == 1:
                     num_x += 1
                 shot_coo = user_input_coo_ship()
                 if isinstance(shot_coo, list):
+                    # Stats
+                    player_obj.number_of_shots += 1
                     # Check repeat shot to one cell
                     if check_repeat_shot(shot_coo, player_obj) == 1:
                         print('You\'ve already shot here! The move goes to the player -', player_obj_reverse.name)
@@ -336,6 +338,8 @@ while game == 1:
                     # Hit check
                     if check_hit_shot(shot_coo, player_obj_reverse) == 1:
                         print('The ship is kill! Keep going.')
+                        # Stats
+                        player_obj.target_shots += 1
                         # Write shots to field reverse player
                         Storage.field_players[player_obj_reverse.queue][shot_coo[0]][shot_coo[1]] = '[X]'
                         # Write shots to shots field
@@ -347,11 +351,14 @@ while game == 1:
                             break
                     elif check_hit_shot(shot_coo, player_obj_reverse) == 2:
                         print('You hit the ship! Keep going.')
+                        # Stats
+                        player_obj.target_shots += 1
                         # Write shots to field reverse player
                         Storage.field_players[player_obj_reverse.queue][shot_coo[0]][shot_coo[1]] = '[X]'
                         # Write shots to shots field
                         Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[X]'
                     elif check_hit_shot(shot_coo, player_obj_reverse) == 0:
+                        # Stats
                         Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[O]'
                         print('You missed... The move goes to the player -', player_obj_reverse.name)
                         if QUEUE == 0:
@@ -363,18 +370,27 @@ while game == 1:
 
 
 # Show stats
-            print('\nNames:', Storage.players[0],
-                  '\nShots:', Storage.ships_player1,
-                  '\nSlip shots:', Storage.ships_player2,
-                  '\nShot slip map:', Storage.shots_field_players[player1.queue],
-                  '\nShot hit map:', Storage.shots_field_players[player2.queue],)
+            print('\nPlayer:', player1.name,
+                  '\nTotal shots:', player1.number_of_shots,
+                  '\nTotal hits shots:', player1.target_shots,
+                  '\nTotal miss shots:', player1.number_of_shots - player1.target_shots,
+                  '\nShots map: \n')
+            for row in Storage.shots_field_players[player1.queue]:  # Show map players with ship/s
+                print(row)
 
-            print('\nNames:', Storage.players[1],
-                  '\nShots:', Storage.ships_player1,
-                  '\nSlip shots:', Storage.ships_player2,
-                  '\nShot slip map:', Storage.shots_field_players[player1.queue],
-                  '\nShot hit map:', Storage.shots_field_players[player2.queue],)
+            print('\nPlayer:', player2.name,
+                  '\nTotal shots:', player2.number_of_shots,
+                  '\nTotal hits shots:', player2.target_shots,
+                  '\nTotal miss shots:', player2.number_of_shots - player2.target_shots,
+                  '\nShots map: \n')
+            for row in Storage.shots_field_players[player2.queue]:  # Show map players with ship/s
+                print(row)
 
+# Deleting param
+            del Storage.shots_field_players
+
+
+# New game cycle
             answer = input('\nDo you want start new game? (Y/N) ')
             if answer.upper() == 'Y':
                 continue
@@ -399,13 +415,3 @@ while game == 1:
 # objects_ship3_player2
 # objects_ship4_player1
 # objects_ship4_player2
-
-# Show players Storage
-#             print('\nNames:', Storage.players,
-#                   '\nFields player1:', Storage.field_players[player1.queue],
-#                   '\nFields player2:', Storage.field_players[player2.queue],
-#                   '\nShips players:', Storage.ships_player1,
-#                   '\nShips players:', Storage.ships_player2,
-#                   '\nShotsFields player1:', Storage.shots_field_players[player1.queue],
-#                   '\nShotsFields player2:', Storage.shots_field_players[player2.queue],
-#                   '\nShots', Storage.shots_field_players, '\n')
