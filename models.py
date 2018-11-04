@@ -47,6 +47,9 @@ class Player(object):
 
         Storage.add_players(queue, name)
 
+        # Robot
+        self.robot = 0
+
         # Stats
         self.number_of_shots = 0
         self.target_shots = 0

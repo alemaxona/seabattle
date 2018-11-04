@@ -4,6 +4,7 @@ __author__ = 'alemaxona'
 main.py - Game logic
 '''
 
+from time import sleep
 from random import randint
 from models import Field, Player, Storage, \
     check_busy, \
@@ -45,12 +46,14 @@ while game == 1:
             field.init_field()
             field.write_field_to_storage()
 
-# ROBOT
 
 # Init player1
             print('\nYou can play against the robot. Enter “robot” for selection.')
             player1 = Player(input('Enter name player1: '), 0)
             print('Welcome player', player1.name)
+# ROBOT
+            if player1.name.upper() == 'ROBOT':
+                player1.robot = 1
 
 # Init player2
             print('\nYou can play against the robot. Enter “robot” for selection.')
@@ -60,12 +63,13 @@ while game == 1:
                 print('Welcome player', player2.name)
             else:
                 print('Welcome player', player2.name)
-
-            # ROBOT
-            if player1.name.upper() == 'ROBOT':
-                ROBOT1 = 1
+# ROBOT
             if player2.name.upper() == 'ROBOT' or player2.name.upper() == 'ROBOT.2':
-                ROBOT2 = 1
+                player2.robot = 1
+
+# Speed robots
+            # ROBOT_SPEED = 1
+            # time.sleep(60) # Delay for 1 minute (60 seconds).
 
 # Write fields to players storage
             field.write_field_to_storage_players(player1)
@@ -103,25 +107,28 @@ while game == 1:
                     for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                         print(num_x, row)
                         num_x += 1
-                    ship_coo = user_input_coo_ship()
-                    if isinstance(ship_coo, list):
-                        if check_busy(ship_coo, player_obj) == 0:  # Check cell for busy
-                            print('Place is busy! Enter coordinates again.')
-                        else:
-                            # Write map with single ships to players storage
-                            Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[1]'
-                            # Add ship to storage
-                            Storage.add_ships([ship_coo], player_obj)
-                            print('\n', end='')
-                            # num_y = [' * ' for i in range(len(Storage.field[0]))]
-                            # print(' ', num_y)
-                            num_x = 1
-                            for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
-                                print(num_x, row)
-                                num_x += 1
-                            n += 0.1
-                            n = round(n, 1)  # Округление
-                            i += 1
+                    if player_obj.robot == 0:
+                        ship_coo = user_input_coo_ship()
+                        if isinstance(ship_coo, list):
+                            if check_busy(ship_coo, player_obj) == 0:  # Check cell for busy
+                                print('Place is busy! Enter coordinates again.')
+                            else:
+                                # Write map with single ships to players storage
+                                Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[1]'
+                                # Add ship to storage
+                                Storage.add_ships([ship_coo], player_obj)
+                                print('\n', end='')
+                                # num_y = [' * ' for i in range(len(Storage.field[0]))]
+                                # print(' ', num_y)
+                                num_x = 1
+                                for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                                    print(num_x, row)
+                                    num_x += 1
+                                n += 0.1
+                                n = round(n, 1)  # Округление
+                                i += 1
+                    else:
+                        pass
 
 
 # Enter coordinates all two deck ships - [][]
@@ -389,6 +396,8 @@ while game == 1:
 
 # Deleting param
             del Storage.shots_field_players
+            del player1
+            del player2
 
 
 # New game cycle
@@ -403,16 +412,7 @@ while game == 1:
 
 '''All objects:'''
 
-# player1
-# player2
-
 # field
 
-# objects_ship1_player1
-# objects_ship1_player2
-# objects_ship2_player1
-# objects_ship2_player2
-# objects_ship3_player1
-# objects_ship3_player2
-# objects_ship4_player1
-# objects_ship4_player2
+# player1
+# player2
