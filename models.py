@@ -171,7 +171,7 @@ def check_max_ships_for_field():
             max_ship2 = 0
             max_ship3 = 0
             max_ship4 = 0
-        if (sum_cell >= 10) and (sum_cell <= 20):
+        elif (sum_cell >= 10) and (sum_cell <= 20):
             max_ship1 = 2
             max_ship2 = 1
             max_ship3 = 0
@@ -187,10 +187,10 @@ def check_max_ships_for_field():
             max_ship3 = 1
             max_ship4 = 0
         elif (sum_cell >= 51) and (sum_cell <= 100):
-            max_ship1 = 4
-            max_ship2 = 3
-            max_ship3 = 2
-            max_ship4 = 1
+            max_ship1 = 0#4
+            max_ship2 = 0#3
+            max_ship3 = 3#2
+            max_ship4 = 0#1
         return [max_ship1, max_ship2, max_ship3, max_ship4]
 
 

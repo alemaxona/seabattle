@@ -1,10 +1,11 @@
 __author__ = 'alemaxona'
 
 """
-user_input.py - Functions check inputs users.
+user_input.py - Functions check inputs users or robots.
 """
 
 from models import Storage
+from random import randint, choice
 
 
 def user_input_coo_field():
@@ -59,3 +60,144 @@ def user_input_coo_ship():
         except ValueError:
             print('Enter only numbers')
             break
+
+
+def robot_input_coo_ship(player_obj, ship):
+    # []
+    if ship == 1:
+        while True:
+            x = randint(0, len(Storage.field) - 1)
+            y = randint(0, len(Storage.field[0]) - 1)
+            ship_coo_robot = [x, y]
+            if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[1]':
+                return ship_coo_robot
+            else:
+                continue
+    # [][]
+    elif ship == 2:
+        while True:
+            x = randint(0, len(Storage.field) - 1)
+            y = randint(0, len(Storage.field[0]) - 1)
+            ship_coo_robot = [x, y]
+            result = []
+            if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[1]' and\
+                    Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[2]':
+                if ship_coo_robot[0] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 1][ship_coo_robot[1]] == ' * ':
+                        result.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
+                if ship_coo_robot[0] + 1 <= len(Storage.field) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] + 1][ship_coo_robot[1]] == ' * ':
+                        result.append([ship_coo_robot[0] + 1, ship_coo_robot[1]])
+                if ship_coo_robot[1] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] - 1] == ' * ':
+                        result.append([ship_coo_robot[0], ship_coo_robot[1] - 1])
+                if ship_coo_robot[1] + 1 <= len(Storage.field[0]) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] + 1] == ' * ':
+                        result.append([ship_coo_robot[0], ship_coo_robot[1] + 1])
+                ship_coo_robot2 = choice(result)
+                if ship_coo_robot != ship_coo_robot2:
+                    return [ship_coo_robot[0], ship_coo_robot[1], ship_coo_robot2[0], ship_coo_robot2[1]]
+                else:
+                    continue
+            else:
+                continue
+    # [][][]
+    elif ship == 3:
+        while True:
+            x = randint(0, len(Storage.field) - 1)
+            y = randint(0, len(Storage.field[0]) - 1)
+            ship_coo_robot = [x, y]
+            result = []
+            result2 = []
+            # []..[]
+            if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[1]' and\
+                    Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[2]' and \
+                    Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[3]':
+                if ship_coo_robot[0] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 1][ship_coo_robot[1]] == ' * ':
+                        result.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
+                if ship_coo_robot[0] + 1 <= len(Storage.field) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] + 1][ship_coo_robot[1]] == ' * ':
+                        result.append([ship_coo_robot[0] + 1, ship_coo_robot[1]])
+                if ship_coo_robot[1] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] - 1] == ' * ':
+                        result.append([ship_coo_robot[0], ship_coo_robot[1] - 1])
+                if ship_coo_robot[1] + 1 <= len(Storage.field[0]) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] + 1] == ' * ':
+                        result.append([ship_coo_robot[0], ship_coo_robot[1] + 1])
+                ship_coo_robot2 = choice(result)
+                # [][]..[]
+                if ship_coo_robot[0] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 1][ship_coo_robot[1]] == ' * ':
+                        result.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
+                if ship_coo_robot[0] + 1 <= len(Storage.field) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] + 1][ship_coo_robot[1]] == ' * ':
+                        result2.append([ship_coo_robot[0] + 1, ship_coo_robot[1]])
+                if ship_coo_robot[1] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] - 1] == ' * ':
+                        result2.append([ship_coo_robot[0], ship_coo_robot[1] - 1])
+                if ship_coo_robot[1] + 1 <= len(Storage.field[0]) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] + 1] == ' * ':
+                        result2.append([ship_coo_robot[0], ship_coo_robot[1] + 1])
+                ship_coo_robot3 = choice(result2)
+                if ship_coo_robot != ship_coo_robot2 and\
+                        ship_coo_robot != ship_coo_robot3 and\
+                        ship_coo_robot2 != ship_coo_robot3:
+                    if (ship_coo_robot[0] == ship_coo_robot3[0] == ship_coo_robot2[0]) or\
+                            (ship_coo_robot[1] == (ship_coo_robot2[1]) == (ship_coo_robot3[1])):
+                        return [ship_coo_robot[0], ship_coo_robot[1], ship_coo_robot2[0], ship_coo_robot2[1],
+                                ship_coo_robot3[0], ship_coo_robot3[1]]
+                else:
+                    continue
+            else:
+                continue
+    # [][][][]
+    elif ship == 4:
+        while True:
+            x = randint(0, len(Storage.field) - 1)
+            y = randint(0, len(Storage.field[0]) - 1)
+            ship_coo_robot = [x, y]
+            result = []
+            result2 = []
+            # []..[]
+            if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[1]' and\
+                    Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[2]' and \
+                    Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[3]':
+                if ship_coo_robot[0] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 1][ship_coo_robot[1]] == ' * ':
+                        result.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
+                if ship_coo_robot[0] + 1 <= len(Storage.field) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] + 1][ship_coo_robot[1]] == ' * ':
+                        result.append([ship_coo_robot[0] + 1, ship_coo_robot[1]])
+                if ship_coo_robot[1] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] - 1] == ' * ':
+                        result.append([ship_coo_robot[0], ship_coo_robot[1] - 1])
+                if ship_coo_robot[1] + 1 <= len(Storage.field[0]) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] + 1] == ' * ':
+                        result.append([ship_coo_robot[0], ship_coo_robot[1] + 1])
+                ship_coo_robot2 = choice(result)
+                # [][]..[]
+                if ship_coo_robot[0] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 1][ship_coo_robot[1]] == ' * ':
+                        result.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
+                if ship_coo_robot[0] + 1 <= len(Storage.field) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] + 1][ship_coo_robot[1]] == ' * ':
+                        result2.append([ship_coo_robot[0] + 1, ship_coo_robot[1]])
+                if ship_coo_robot[1] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] - 1] == ' * ':
+                        result2.append([ship_coo_robot[0], ship_coo_robot[1] - 1])
+                if ship_coo_robot[1] + 1 <= len(Storage.field[0]) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] + 1] == ' * ':
+                        result2.append([ship_coo_robot[0], ship_coo_robot[1] + 1])
+                ship_coo_robot3 = choice(result2)
+                if ship_coo_robot != ship_coo_robot2 and\
+                        ship_coo_robot != ship_coo_robot3 and\
+                        ship_coo_robot2 != ship_coo_robot3:
+                    if (ship_coo_robot[0] == ship_coo_robot3[0] == ship_coo_robot2[0]) or\
+                            (ship_coo_robot[1] == (ship_coo_robot2[1]) == (ship_coo_robot3[1])):
+                        return [ship_coo_robot[0], ship_coo_robot[1], ship_coo_robot2[0], ship_coo_robot2[1],
+                                ship_coo_robot3[0], ship_coo_robot3[1]]
+                else:
+                    continue
+            else:
+                continue
