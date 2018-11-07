@@ -6,14 +6,20 @@ main.py - Game logic
 
 from time import sleep
 from random import randint
-from models import Field, Player, Storage, \
+from models import Field, \
+    Player, \
+    Storage, \
     check_busy, \
     check_max_ships_for_field, \
-    ship_connection_check,\
-    check_hit_shot,\
-    check_ships,\
-    check_repeat_shot
-from user_input import user_input_coo_ship, user_input_coo_field, robot_input_coo_ship
+    ship_connection_check, \
+    check_hit_shot, \
+    check_ships, \
+    check_repeat_shot, \
+    robot_shot_logic
+from user_input import user_input_coo_ship, \
+    user_input_coo_field, \
+    robot_input_coo_ship, \
+    robot_input_coo_shot
 
 
 print('\n*** SEABATTLE ***\n\n')
@@ -68,8 +74,6 @@ while game == 1:
                 player2.robot = 1
 
 # Speed robots
-            print('Storage len rows', len(Storage.field))
-            print('Storage len columns', len(Storage.field[0]))
             ROBOT_SPEED = 3    # Delay for 7 seconds.
             sleep(ROBOT_SPEED)
 
@@ -183,7 +187,8 @@ while game == 1:
                                         Storage.add_ships([ship_coo, ship_coo2], player_obj)
                                         print('\n', end='')
                                         num_x = 1
-                                        for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                                        # Show map players with ship/s
+                                        for row in Storage.field_players[player_obj.queue]:
                                             print(num_x, row)
                                             num_x += 1
                                         n += 0.1
@@ -193,7 +198,8 @@ while game == 1:
                                         print('Build ship error!')
                                         print('\n', end='')
                                         num_x = 1
-                                        for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                                        # Show map players with ship/s
+                                        for row in Storage.field_players[player_obj.queue]:
                                             print(num_x, row)
                                             num_x += 1
                             else:
@@ -201,7 +207,6 @@ while game == 1:
                     else:
                         print('\nROBOT enters coordinates two deck ships (2 cell)')
                         ship_coo_robot = robot_input_coo_ship(player_obj, 2)
-                        print(ship_coo_robot)
                         ship_robot = [ship_coo_robot[0], ship_coo_robot[1]]
                         ship_robot2 = [ship_coo_robot[2], ship_coo_robot[3]]
                         # Write map with two ships to players storage
@@ -209,7 +214,6 @@ while game == 1:
                         Storage.field_players[player_obj.queue][ship_robot2[0]][ship_robot2[1]] = '[2]'
                         # Add ship to storage
                         Storage.add_ships([ship_robot, ship_robot2], player_obj)
-                        print([ship_robot, ship_robot2])
                         print('\n', end='')
                         num_x = 1
                         for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
@@ -246,7 +250,8 @@ while game == 1:
                                     print('Cell is busy! Enter coo again.')
                                     print('\n', end='')
                                     num_x = 1
-                                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                                    # Show map players with ship/s
+                                    for row in Storage.field_players[player_obj.queue]:
                                         print(num_x, row)
                                         num_x += 1
                                 else:
@@ -259,7 +264,8 @@ while game == 1:
                                         Storage.add_ships([ship_coo, ship_coo2, ship_coo3], player_obj)
                                         print('\n', end='')
                                         num_x = 1
-                                        for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                                        # Show map players with ship/s
+                                        for row in Storage.field_players[player_obj.queue]:
                                             print(num_x, row)
                                             num_x += 1
                                         n += 0.1
@@ -269,15 +275,15 @@ while game == 1:
                                         print('Build ship error!')
                                         print('\n', end='')
                                         num_x = 1
-                                        for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                                        # Show map players with ship/s
+                                        for row in Storage.field_players[player_obj.queue]:
                                             print(num_x, row)
                                             num_x += 1
                             else:
                                 print('Build ship error! The coordinates of the parts of the ship must be unique!')
                     else:
-                        print('\nROBOT enters coordinates two deck ships (3 cell)')
+                        print('\nROBOT enters coordinates three deck ships (3 cell)')
                         ship_coo_robot = robot_input_coo_ship(player_obj, 3)
-                        print(ship_coo_robot)
                         ship_robot = [ship_coo_robot[0], ship_coo_robot[1]]
                         ship_robot2 = [ship_coo_robot[2], ship_coo_robot[3]]
                         ship_robot3 = [ship_coo_robot[4], ship_coo_robot[5]]
@@ -287,7 +293,6 @@ while game == 1:
                         Storage.field_players[player_obj.queue][ship_robot3[0]][ship_robot3[1]] = '[3]'
                         # Add ship to storage
                         Storage.add_ships([ship_robot, ship_robot2, ship_robot3], player_obj)
-                        print([ship_robot, ship_robot2, ship_robot3])
                         print('\n', end='')
                         num_x = 1
                         for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
@@ -308,60 +313,89 @@ while game == 1:
                     for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
                         print(num_x, row)
                         num_x += 1
-                    print('\nEnter coordinates 1/4 ship')
-                    ship_coo = user_input_coo_ship()
-                    print('Enter coordinates 1/4 ship')
-                    ship_coo2 = user_input_coo_ship()
-                    print('Enter coordinates 1/4 ship')
-                    ship_coo3 = user_input_coo_ship()
-                    print('Enter coordinates 1/4 ship')
-                    ship_coo4 = user_input_coo_ship()
-                    if isinstance(ship_coo, list) and\
-                            isinstance(ship_coo2, list) and\
-                            isinstance(ship_coo3, list) and\
-                            isinstance(ship_coo4, list):
-                        # Pre write! ship_coo1 != ship_coo2 != ship_coo3 != ship_coo4
-                        if ship_coo != ship_coo2 and ship_coo != ship_coo3 and ship_coo != ship_coo4 and\
-                                ship_coo2 != ship_coo3 and ship_coo2 != ship_coo4 and\
-                                ship_coo3 != ship_coo4:
-                            # Check cell for busy:  # Check cell for busy
-                            if check_busy(ship_coo, player_obj) == 0 or\
-                                    check_busy(ship_coo2, player_obj) == 0 or\
-                                    check_busy(ship_coo3, player_obj) == 0 or \
-                                    check_busy(ship_coo4, player_obj) == 0:
-                                print('Cell is busy! Enter coo again.')
-                                print('\n', end='')
-                                num_x = 1
-                                for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
-                                    print(num_x, row)
-                                    num_x += 1
-                            else:
-                                if ship_connection_check([ship_coo, ship_coo2, ship_coo3, ship_coo4]) == 1:
-                                    # Write map with two ships to players storage
-                                    Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[4]'
-                                    Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[4]'
-                                    Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[4]'
-                                    Storage.field_players[player_obj.queue][ship_coo4[0]][ship_coo4[1]] = '[4]'
-                                    # Add ship to storage
-                                    Storage.add_ships([ship_coo, ship_coo2, ship_coo3, ship_coo4], player_obj)
+                    if player_obj.robot == 0:
+                        print('\nEnter coordinates 1/4 ship')
+                        ship_coo = user_input_coo_ship()
+                        print('Enter coordinates 1/4 ship')
+                        ship_coo2 = user_input_coo_ship()
+                        print('Enter coordinates 1/4 ship')
+                        ship_coo3 = user_input_coo_ship()
+                        print('Enter coordinates 1/4 ship')
+                        ship_coo4 = user_input_coo_ship()
+                        if isinstance(ship_coo, list) and\
+                                isinstance(ship_coo2, list) and\
+                                isinstance(ship_coo3, list) and\
+                                isinstance(ship_coo4, list):
+                            # Pre write! ship_coo1 != ship_coo2 != ship_coo3 != ship_coo4
+                            if ship_coo != ship_coo2 and ship_coo != ship_coo3 and ship_coo != ship_coo4 and\
+                                    ship_coo2 != ship_coo3 and ship_coo2 != ship_coo4 and\
+                                    ship_coo3 != ship_coo4:
+                                # Check cell for busy:  # Check cell for busy
+                                if check_busy(ship_coo, player_obj) == 0 or\
+                                        check_busy(ship_coo2, player_obj) == 0 or\
+                                        check_busy(ship_coo3, player_obj) == 0 or \
+                                        check_busy(ship_coo4, player_obj) == 0:
+                                    print('Cell is busy! Enter coo again.')
                                     print('\n', end='')
                                     num_x = 1
-                                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                                    # Show map players with ship/s
+                                    for row in Storage.field_players[player_obj.queue]:
                                         print(num_x, row)
                                         num_x += 1
-                                    n += 0.1
-                                    n = round(n, 1)  # Округление
-                                    i += 1
                                 else:
-                                    print('Build ship error!')
-                                    print('\n', end='')
-                                    num_x = 1
-                                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
-                                        print(num_x, row)
-                                        num_x += 1
-                                        # Second cycle pass | Второй проход цикла.
-                        else:
-                            print('Build ship error! The coordinates of the parts of the ship must be unique!')
+                                    if ship_connection_check([ship_coo, ship_coo2, ship_coo3, ship_coo4]) == 1:
+                                        # Write map with two ships to players storage
+                                        Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[4]'
+                                        Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[4]'
+                                        Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[4]'
+                                        Storage.field_players[player_obj.queue][ship_coo4[0]][ship_coo4[1]] = '[4]'
+                                        # Add ship to storage
+                                        Storage.add_ships([ship_coo, ship_coo2, ship_coo3, ship_coo4], player_obj)
+                                        print('\n', end='')
+                                        num_x = 1
+                                        # Show map players with ship/s
+                                        for row in Storage.field_players[player_obj.queue]:
+                                            print(num_x, row)
+                                            num_x += 1
+                                        n += 0.1
+                                        n = round(n, 1)  # Округление
+                                        i += 1
+                                    else:
+                                        print('Build ship error!')
+                                        print('\n', end='')
+                                        num_x = 1
+                                        # Show map players with ship/s
+                                        for row in Storage.field_players[player_obj.queue]:
+                                            print(num_x, row)
+                                            num_x += 1
+                                            # Second cycle pass | Второй проход цикла.
+                            else:
+                                print('Build ship error! The coordinates of the parts of the ship must be unique!')
+                    else:
+                        print('\nROBOT enters coordinates four deck ships (4 cell)')
+                        ship_coo_robot = robot_input_coo_ship(player_obj, 4)
+                        ship_robot = [ship_coo_robot[0], ship_coo_robot[1]]
+                        ship_robot2 = [ship_coo_robot[2], ship_coo_robot[3]]
+                        ship_robot3 = [ship_coo_robot[4], ship_coo_robot[5]]
+                        ship_robot4 = [ship_coo_robot[6], ship_coo_robot[7]]
+                        # Write map with two ships to players storage
+                        Storage.field_players[player_obj.queue][ship_robot[0]][ship_robot[1]] = '[4]'
+                        Storage.field_players[player_obj.queue][ship_robot2[0]][ship_robot2[1]] = '[4]'
+                        Storage.field_players[player_obj.queue][ship_robot3[0]][ship_robot3[1]] = '[4]'
+                        Storage.field_players[player_obj.queue][ship_robot4[0]][ship_robot4[1]] = '[4]'
+                        # Add ship to storage
+                        Storage.add_ships([ship_robot, ship_robot2, ship_robot3, ship_robot4], player_obj)
+                        print('\n', end='')
+                        num_x = 1
+                        # Show map players with ship/s
+                        for row in Storage.field_players[player_obj.queue]:
+                            print(num_x, row)
+                            num_x += 1
+                        sleep(ROBOT_SPEED)
+                        n += 0.1
+                        n = round(n, 1)  # Округление
+                        i += 1
+
                 flag += 1
                 if QUEUE == 1:
                     QUEUE = 0
@@ -381,8 +415,10 @@ while game == 1:
             QUEUE = randint(player1.queue, player2.queue)
             if QUEUE == player1.queue:
                 print('\n\nThe computer chose the player who will start first. It\'s -', player1.name)
+                sleep(ROBOT_SPEED)
             else:
                 print('\n\nThe computer chose the player who will start first. It\'s -', player2.name)
+                sleep(ROBOT_SPEED)
 
 # Shots
             while True:
@@ -397,18 +433,54 @@ while game == 1:
                 for row in Storage.shots_field_players[player_obj.queue]:  # Show map players with ship/s
                     print(num_x, row)
                     num_x += 1
-                shot_coo = user_input_coo_ship()
-                if isinstance(shot_coo, list):
+                sleep(ROBOT_SPEED)
+                if player_obj.robot == 0:
+                    shot_coo = user_input_coo_ship()
+                    if isinstance(shot_coo, list):
+                        # Stats
+                        player_obj.number_of_shots += 1
+                        # Check repeat shot to one cell
+                        if check_repeat_shot(shot_coo, player_obj) == 1:
+                            print('You\'ve already shot here! The move goes to the player -', player_obj_reverse.name)
+                            if QUEUE == 0:
+                                QUEUE = 1
+                            elif QUEUE == 1:
+                                QUEUE = 0
+                            continue
+                        # Hit check
+                        if check_hit_shot(shot_coo, player_obj_reverse) == 1:
+                            print('The ship is kill! Keep going.')
+                            # Stats
+                            player_obj.target_shots += 1
+                            # Write shots to field reverse player
+                            Storage.field_players[player_obj_reverse.queue][shot_coo[0]][shot_coo[1]] = '[X]'
+                            # Write shots to shots field
+                            Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[X]'
+                            if check_ships(player_obj_reverse) == 0:
+                                print('\n****************')
+                                print('*** You win! ***')
+                                print('****************')
+                                break
+                        elif check_hit_shot(shot_coo, player_obj_reverse) == 2:
+                            print('You hit the ship! Keep going.')
+                            # Stats
+                            player_obj.target_shots += 1
+                            # Write shots to field reverse player
+                            Storage.field_players[player_obj_reverse.queue][shot_coo[0]][shot_coo[1]] = '[X]'
+                            # Write shots to shots field
+                            Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[X]'
+                        elif check_hit_shot(shot_coo, player_obj_reverse) == 0:
+                            # Stats
+                            Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[O]'
+                            print('You missed... The move goes to the player -', player_obj_reverse.name)
+                            if QUEUE == 0:
+                                QUEUE = 1
+                            elif QUEUE == 1:
+                                QUEUE = 0
+                else:
+                    shot_coo = robot_input_coo_shot(player_obj_reverse)
                     # Stats
                     player_obj.number_of_shots += 1
-                    # Check repeat shot to one cell
-                    if check_repeat_shot(shot_coo, player_obj) == 1:
-                        print('You\'ve already shot here! The move goes to the player -', player_obj_reverse.name)
-                        if QUEUE == 0:
-                            QUEUE = 1
-                        elif QUEUE == 1:
-                            QUEUE = 0
-                        continue
                     # Hit check
                     if check_hit_shot(shot_coo, player_obj_reverse) == 1:
                         print('The ship is kill! Keep going.')
@@ -420,11 +492,13 @@ while game == 1:
                         Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[X]'
                         if check_ships(player_obj_reverse) == 0:
                             print('\n****************')
-                            print('*** You win! ***')
+                            print('*** Robot win! ***')
                             print('****************')
                             break
                     elif check_hit_shot(shot_coo, player_obj_reverse) == 2:
-                        print('You hit the ship! Keep going.')
+                        print('Robot hit the ship! Keep going.')
+                        # Shots logic for robots
+  # Тут!    # robot_shot_logic(player_obj_reverse)
                         # Stats
                         player_obj.target_shots += 1
                         # Write shots to field reverse player
@@ -434,7 +508,7 @@ while game == 1:
                     elif check_hit_shot(shot_coo, player_obj_reverse) == 0:
                         # Stats
                         Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[O]'
-                        print('You missed... The move goes to the player -', player_obj_reverse.name)
+                        print('Robot missed... The move goes to the player -', player_obj_reverse.name)
                         if QUEUE == 0:
                             QUEUE = 1
                         elif QUEUE == 1:
@@ -474,11 +548,3 @@ while game == 1:
                 print('\nOk, goodbye...')
                 game = 0
                 break
-
-
-'''All objects:'''
-
-# field
-
-# player1
-# player2

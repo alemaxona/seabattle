@@ -187,10 +187,10 @@ def check_max_ships_for_field():
             max_ship3 = 1
             max_ship4 = 0
         elif (sum_cell >= 51) and (sum_cell <= 100):
-            max_ship1 = 0#4
-            max_ship2 = 0#3
-            max_ship3 = 3#2
-            max_ship4 = 0#1
+            max_ship1 = 4
+            max_ship2 = 3
+            max_ship3 = 2
+            max_ship4 = 1
         return [max_ship1, max_ship2, max_ship3, max_ship4]
 
 
@@ -249,7 +249,7 @@ def check_repeat_shot(coo, obj):
     Check for re-hit shots.
     """
 
-    if Storage.shots_field_players[obj.queue][coo[0]][coo[1]] == '[O]' or\
+    if Storage.shots_field_players[obj.queue][coo[0]][coo[1]] == '[O]' or \
             Storage.shots_field_players[obj.queue][coo[0]][coo[1]] == '[X]':
         return 1
     else:
@@ -283,3 +283,10 @@ def check_ships(obj):
         return 1  # If ships an field
     else:
         return 0  # If is not ships an field
+
+
+def robot_shot_logic():
+    """
+        Shots logic for robots.
+    """
+    pass

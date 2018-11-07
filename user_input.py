@@ -62,6 +62,15 @@ def user_input_coo_ship():
             break
 
 
+def robot_input_coo_shot(obj):
+    x = randint(0, len(Storage.field) - 1)
+    y = randint(0, len(Storage.field[0]) - 1)
+    ship_coo_robot = [x, y]
+    if Storage.field_players[obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[X]' or \
+            Storage.field_players[obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[O]':
+        return ship_coo_robot
+
+
 def robot_input_coo_ship(player_obj, ship):
     # []
     if ship == 1:
@@ -129,7 +138,7 @@ def robot_input_coo_ship(player_obj, ship):
                 # [][]..[]
                 if ship_coo_robot[0] - 1 >= 0:
                     if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 1][ship_coo_robot[1]] == ' * ':
-                        result.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
+                        result2.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
                 if ship_coo_robot[0] + 1 <= len(Storage.field) - 1:
                     if Storage.field_players[player_obj.queue][ship_coo_robot[0] + 1][ship_coo_robot[1]] == ' * ':
                         result2.append([ship_coo_robot[0] + 1, ship_coo_robot[1]])
@@ -143,8 +152,8 @@ def robot_input_coo_ship(player_obj, ship):
                 if ship_coo_robot != ship_coo_robot2 and\
                         ship_coo_robot != ship_coo_robot3 and\
                         ship_coo_robot2 != ship_coo_robot3:
-                    if (ship_coo_robot[0] == ship_coo_robot3[0] == ship_coo_robot2[0]) or\
-                            (ship_coo_robot[1] == (ship_coo_robot2[1]) == (ship_coo_robot3[1])):
+                    if (ship_coo_robot[0] == ship_coo_robot2[0] == ship_coo_robot3[0]) or\
+                            (ship_coo_robot[1] == ship_coo_robot2[1] == ship_coo_robot3[1]):
                         return [ship_coo_robot[0], ship_coo_robot[1], ship_coo_robot2[0], ship_coo_robot2[1],
                                 ship_coo_robot3[0], ship_coo_robot3[1]]
                 else:
@@ -159,10 +168,12 @@ def robot_input_coo_ship(player_obj, ship):
             ship_coo_robot = [x, y]
             result = []
             result2 = []
+            result3 = []
             # []..[]
             if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[1]' and\
                     Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[2]' and \
-                    Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[3]':
+                    Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[3]' and\
+                    Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1]] != '[4]':
                 if ship_coo_robot[0] - 1 >= 0:
                     if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 1][ship_coo_robot[1]] == ' * ':
                         result.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
@@ -179,7 +190,7 @@ def robot_input_coo_ship(player_obj, ship):
                 # [][]..[]
                 if ship_coo_robot[0] - 1 >= 0:
                     if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 1][ship_coo_robot[1]] == ' * ':
-                        result.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
+                        result2.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
                 if ship_coo_robot[0] + 1 <= len(Storage.field) - 1:
                     if Storage.field_players[player_obj.queue][ship_coo_robot[0] + 1][ship_coo_robot[1]] == ' * ':
                         result2.append([ship_coo_robot[0] + 1, ship_coo_robot[1]])
@@ -190,13 +201,42 @@ def robot_input_coo_ship(player_obj, ship):
                     if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] + 1] == ' * ':
                         result2.append([ship_coo_robot[0], ship_coo_robot[1] + 1])
                 ship_coo_robot3 = choice(result2)
+                # [][][]..[]
+                if ship_coo_robot[0] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 1][ship_coo_robot[1]] == ' * ':
+                        result3.append([ship_coo_robot[0] - 1, ship_coo_robot[1]])
+                if ship_coo_robot[0] + 1 <= len(Storage.field) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] + 1][ship_coo_robot[1]] == ' * ':
+                        result3.append([ship_coo_robot[0] + 1, ship_coo_robot[1]])
+                if ship_coo_robot[1] - 1 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] - 1] == ' * ':
+                        result3.append([ship_coo_robot[0], ship_coo_robot[1] - 1])
+                if ship_coo_robot[1] + 1 <= len(Storage.field[0]) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] + 1] == ' * ':
+                        result3.append([ship_coo_robot[0], ship_coo_robot[1] + 1])
+                if ship_coo_robot[0] - 2 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] - 2][ship_coo_robot[1]] == ' * ':
+                        result3.append([ship_coo_robot[0] - 2, ship_coo_robot[1]])
+                if ship_coo_robot[0] + 2 <= len(Storage.field) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0] + 2][ship_coo_robot[1]] == ' * ':
+                        result3.append([ship_coo_robot[0] + 2, ship_coo_robot[1]])
+                if ship_coo_robot[1] - 2 >= 0:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] - 2] == ' * ':
+                        result3.append([ship_coo_robot[0], ship_coo_robot[1] - 2])
+                if ship_coo_robot[1] + 2 <= len(Storage.field[0]) - 1:
+                    if Storage.field_players[player_obj.queue][ship_coo_robot[0]][ship_coo_robot[1] + 2] == ' * ':
+                        result3.append([ship_coo_robot[0], ship_coo_robot[1] + 2])
+                ship_coo_robot4 = choice(result3)
                 if ship_coo_robot != ship_coo_robot2 and\
                         ship_coo_robot != ship_coo_robot3 and\
-                        ship_coo_robot2 != ship_coo_robot3:
-                    if (ship_coo_robot[0] == ship_coo_robot3[0] == ship_coo_robot2[0]) or\
-                            (ship_coo_robot[1] == (ship_coo_robot2[1]) == (ship_coo_robot3[1])):
+                        ship_coo_robot != ship_coo_robot4 and\
+                        ship_coo_robot2 != ship_coo_robot3 and\
+                        ship_coo_robot2 != ship_coo_robot4 and\
+                        ship_coo_robot3 != ship_coo_robot4:
+                    if (ship_coo_robot[0] == ship_coo_robot2[0] == ship_coo_robot3[0] == ship_coo_robot4[0]) or\
+                            (ship_coo_robot[1] == ship_coo_robot2[1] == ship_coo_robot3[1] == ship_coo_robot4[1]):
                         return [ship_coo_robot[0], ship_coo_robot[1], ship_coo_robot2[0], ship_coo_robot2[1],
-                                ship_coo_robot3[0], ship_coo_robot3[1]]
+                                ship_coo_robot3[0], ship_coo_robot3[1], ship_coo_robot4[0], ship_coo_robot4[1]]
                 else:
                     continue
             else:
