@@ -54,6 +54,9 @@ class Player(object):
         self.number_of_shots = 0
         self.target_shots = 0
 
+        # History shots
+        self.history_shots = []
+
 
 class Field(object):
 
@@ -177,10 +180,10 @@ def check_max_ships_for_field():
             max_ship3 = 0
             max_ship4 = 0
         elif (sum_cell >= 21) and (sum_cell <= 30):
-            max_ship1 = 2
-            max_ship2 = 1
-            max_ship3 = 1
-            max_ship4 = 0
+            max_ship1 = 0#2
+            max_ship2 = 0#1
+            max_ship3 = 0#1
+            max_ship4 = 1#0
         elif (sum_cell >= 31) and (sum_cell <= 50):
             max_ship1 = 3
             max_ship2 = 2
@@ -283,10 +286,3 @@ def check_ships(obj):
         return 1  # If ships an field
     else:
         return 0  # If is not ships an field
-
-
-def robot_shot_logic():
-    """
-        Shots logic for robots.
-    """
-    pass

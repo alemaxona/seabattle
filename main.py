@@ -14,8 +14,7 @@ from models import Field, \
     ship_connection_check, \
     check_hit_shot, \
     check_ships, \
-    check_repeat_shot, \
-    robot_shot_logic
+    check_repeat_shot
 from user_input import user_input_coo_ship, \
     user_input_coo_field, \
     robot_input_coo_ship, \
@@ -478,12 +477,16 @@ while game == 1:
                             elif QUEUE == 1:
                                 QUEUE = 0
                 else:
-                    shot_coo = robot_input_coo_shot(player_obj_reverse)
+                    check = 0
+                    shot_coo = robot_input_coo_shot(player_obj_reverse, player_obj, check)
+                    player_obj.history_shots.append(shot_coo)
+                    print('Player history shots', player_obj.history_shots)
                     # Stats
                     player_obj.number_of_shots += 1
                     # Hit check
                     if check_hit_shot(shot_coo, player_obj_reverse) == 1:
-                        print('The ship is kill! Keep going.')
+                        check = 0
+                        print('Robot killed ship! Keep going.')
                         # Stats
                         player_obj.target_shots += 1
                         # Write shots to field reverse player
@@ -496,9 +499,9 @@ while game == 1:
                             print('****************')
                             break
                     elif check_hit_shot(shot_coo, player_obj_reverse) == 2:
+                        check = 1
                         print('Robot hit the ship! Keep going.')
                         # Shots logic for robots
-  # Тут!    # robot_shot_logic(player_obj_reverse)
                         # Stats
                         player_obj.target_shots += 1
                         # Write shots to field reverse player
@@ -506,6 +509,7 @@ while game == 1:
                         # Write shots to shots field
                         Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[X]'
                     elif check_hit_shot(shot_coo, player_obj_reverse) == 0:
+                        check = 0
                         # Stats
                         Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[O]'
                         print('Robot missed... The move goes to the player -', player_obj_reverse.name)
