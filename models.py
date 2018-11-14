@@ -99,11 +99,6 @@ def check_busy(size, obj_player):
         return 1
     else:
         return 0
-    # elif Storage.field_players[obj_player.queue][size[0]][size[1]] == '[1]' or \
-    #         Storage.field_players[obj_player.queue][size[0]][size[1]] == '[2]' or \
-    #         Storage.field_players[obj_player.queue][size[0]][size[1]] == '[3]' or \
-    #         Storage.field_players[obj_player.queue][size[0]][size[1]] == '[4]':
-    #     return 0
 
 
 def ship_connection_check(coo):
@@ -182,9 +177,9 @@ def check_max_ships_for_field():
             max_ship3 = 0
             max_ship4 = 0
         elif (sum_cell >= 21) and (sum_cell <= 30):
-            max_ship1 = 2
-            max_ship2 = 1
-            max_ship3 = 0
+            max_ship1 = 0#2
+            max_ship2 = 2#1
+            max_ship3 = 1#0
             max_ship4 = 0
         elif (sum_cell >= 31) and (sum_cell <= 50):
             max_ship1 = 3
@@ -255,7 +250,8 @@ def check_repeat_shot(coo, obj):
     """
 
     if Storage.shots_field_players[obj.queue][coo[0]][coo[1]] == '[O]' or \
-            Storage.shots_field_players[obj.queue][coo[0]][coo[1]] == '[X]':
+            Storage.shots_field_players[obj.queue][coo[0]][coo[1]] == '[X]' or \
+            Storage.shots_field_players[obj.queue][coo[0]][coo[1]] == '[x]':
         return 1
     else:
         return 0

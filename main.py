@@ -75,7 +75,7 @@ while game == 1:
 
 
 # Speed robots
-            ROBOT_SPEED = 2    # Delay for 7 seconds.
+            ROBOT_SPEED = 1    # Delay for 7 seconds.
             # sleep(ROBOT_SPEED)
 
 # Write fields to players storage
@@ -463,6 +463,9 @@ while game == 1:
                 sleep(ROBOT_SPEED)
 
 # Shots
+            # !!!!!!!!
+            ROBOT_SPEED = 5
+            # !!!!!!!!
             while True:
                 if QUEUE == 0:
                     player_obj = player1
@@ -520,14 +523,14 @@ while game == 1:
                             elif QUEUE == 1:
                                 QUEUE = 0
                 else:
-                    check = 0
-                    shot_coo = robot_input_coo_shot(player_obj_reverse, player_obj, check)
+                    shot_coo = robot_input_coo_shot(player_obj_reverse, player_obj)
+                    print(player_obj.history_shots)
+                    print(shot_coo)
                     player_obj.history_shots.append(shot_coo)
                     # Stats
                     player_obj.number_of_shots += 1
                     # Hit check
                     if check_hit_shot(shot_coo, player_obj_reverse) == 1:
-                        check = 0
                         print('Robot killed ship! Keep going.')
                         # Stats
                         player_obj.target_shots += 1
@@ -541,17 +544,17 @@ while game == 1:
                             print('****************')
                             break
                     elif check_hit_shot(shot_coo, player_obj_reverse) == 2:
-                        check = 1
                         print('Robot hit the ship! Keep going.')
                         # Shots logic for robots
                         # Stats
                         player_obj.target_shots += 1
                         # Write shots to field reverse player
-                        Storage.field_players[player_obj_reverse.queue][shot_coo[0]][shot_coo[1]] = '[X]'
+                        Storage.field_players[player_obj_reverse.queue][shot_coo[0]][shot_coo[1]] = '[x]'
                         # Write shots to shots field
-                        Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[X]'
+                        Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[x]'
                     elif check_hit_shot(shot_coo, player_obj_reverse) == 0:
-                        check = 0
+                        # Write shots to field reverse player
+                        Storage.field_players[player_obj_reverse.queue][shot_coo[0]][shot_coo[1]] = '[O]'
                         # Stats
                         Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[O]'
                         print('Robot missed... The move goes to the player -', player_obj_reverse.name)

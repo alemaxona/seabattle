@@ -356,36 +356,120 @@ def robot_input_coo_ship(player_obj, ship):
                 continue
 
 
-def robot_input_coo_shot(obj_reverse, obj, check):
-    # if len(obj.history_shots) > 0:
-    #     if obj.history_shots[-1][0] == obj.history_shots[-2][0]:
-    #         pass
-    #     elif obj.history_shots[-1][1] == obj.history_shots[-2][1]:
-    #         pass
-    #     elif obj.history_shots[-1][0] == obj.history_shots[-2][0] == obj.history_shots[-3][0]:
-    #         pass
-    #     elif obj.history_shots[-1][1] == obj.history_shots[-2][1] == obj.history_shots[-3][1]:
-    #         pass
-    #     elif obj.history_shots[-1][0] == obj.history_shots[-2][0] == obj.history_shots[-3][0] == obj.history_shots[-4][0]:
-    #         pass
-    #     elif obj.history_shots[-1][1] == obj.history_shots[-2][1] == obj.history_shots[-3][1] == obj.history_shots[-4][1]:
-    #         pass
-    #     else:
-    #         pass
-    # else:
-    while True:
-        x = randint(0, (len(Storage.field_players[obj_reverse.queue]) - 1))
-        y = randint(0, (len(Storage.field_players[obj_reverse.queue][0]) - 1))
-        if Storage.field_players[obj_reverse.queue][x][y] != '[O]':
+def robot_input_coo_shot(obj_reverse, obj):
+    z = Storage.field_players[obj_reverse.queue]
+    # Первый выстрел
+    if len(obj.history_shots) == 0:
+        while True:
+            x = randint(0, (len(Storage.field_players[obj_reverse.queue]) - 1))
+            y = randint(0, (len(Storage.field_players[obj_reverse.queue][0]) - 1))
             return [x, y]
-        else:
-            continue
-
-        # if z[coo[0] - 1][coo[1]] == ' * ' and \
-        #         z[coo[0] - 1][coo[1] + 1] == ' * ' and \
-        #         z[coo[0]][coo[1] + 1] == ' * ' and \
-        #         z[coo[0] + 1][coo[1] + 1] == ' * ' and \
-        #         z[coo[0] + 1][coo[1]] == ' * ' and \
-        #         z[coo[0] + 1][coo[1] - 1] == ' * ' and \
-        #         z[coo[0]][coo[1] - 1] == ' * ' and \
-        #         z[coo[0] - 1][coo[1] - 1] == ' * ':
+    # Если последний шот в истории промах или убийство
+    elif z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[O]' or \
+            z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[X]':
+        while True:
+            x = randint(0, (len(Storage.field_players[obj_reverse.queue]) - 1))
+            y = randint(0, (len(Storage.field_players[obj_reverse.queue][0]) - 1))
+            # новый шот в ' * '
+            if Storage.field_players[obj_reverse.queue][x][y] != '[O]' and \
+                Storage.field_players[obj_reverse.queue][x][y] != '[X]' and \
+                    Storage.field_players[obj_reverse.queue][x][y] != '[x]':
+                return [x, y]
+            else:
+                continue
+    # Если последний шот в истории - ранение
+    elif z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[x]':
+        rows = len(Storage.field_players[obj.queue]) - 1
+        columns = len(Storage.field_players[obj.queue][0]) - 1
+        result = []
+        # field corners
+        if obj.history_shots[-1][0] == 0 and obj.history_shots[-1][1] == 0:  # [0, 0]
+            while True:
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
+                result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
+                r = choice(result)
+                print('r', r)
+                if z[r[0]][r[1]] != '[O]':
+                    return r
+                else:
+                    continue
+        elif obj.history_shots[-1][0] == rows and obj.history_shots[-1][1] == 0:  # [rows, 0]
+            while True:
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
+                result.append([obj.history_shots[-1][0] - 1, obj.history_shots[-1][1]])
+                r = choice(result)
+                if z[r[0]][r[1]] != '[O]':
+                    return r
+                else:
+                    continue
+        elif obj.history_shots[-1][0] == 0 and obj.history_shots[-1][1] == columns:  # [0, column]
+            while True:
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
+                result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
+                r = choice(result)
+                if z[r[0]][r[1]] != '[O]':
+                    return r
+                else:
+                    continue
+        elif obj.history_shots[-1][0] == rows and obj.history_shots[-1][1] == columns:  # [rows, column]
+            while True:
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
+                result.append([obj.history_shots[-1][0] - 1, obj.history_shots[-1][1]])
+                r = choice(result)
+                if z[r[0]][r[1]] != '[O]':
+                    return r
+                else:
+                    continue
+        # field sides
+        elif obj.history_shots[-1][0] != 0 and obj.history_shots[-1][1] == 0:  # [., 0]
+            while True:
+                result.append([obj.history_shots[-1][0] - 1, obj.history_shots[-1][1]])
+                result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
+                r = choice(result)
+                if z[r[0]][r[1]] != '[O]':
+                    return r
+                else:
+                    continue
+        elif obj.history_shots[-1][0] == 0 and obj.history_shots[-1][1] != 0:  # [0, .]
+            while True:
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
+                result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
+                r = choice(result)
+                if z[r[0]][r[1]] != '[O]':
+                    return r
+                else:
+                    continue
+        elif obj.history_shots[-1][0] == rows and obj.history_shots[-1][1] != 0:  # [rows, .]
+            while True:
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
+                result.append([obj.history_shots[-1][0] - 1, obj.history_shots[-1][1]])
+                r = choice(result)
+                if z[r[0]][r[1]] != '[O]':
+                    return r
+                else:
+                    continue
+        elif obj.history_shots[-1][0] != 0 and obj.history_shots[-1][1] == columns:  # [., columns]
+            while True:
+                result.append([obj.history_shots[-1][0] - 1, obj.history_shots[-1][1]])
+                result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
+                r = choice(result)
+                if z[r[0]][r[1]] != '[O]':
+                    return r
+                else:
+                    continue
+        # other
+        elif (0 < obj.history_shots[-1][0] < rows) and (0 < obj.history_shots[-1][1] < columns):
+            while True:
+                result.append([obj.history_shots[-1][0] - 1, obj.history_shots[-1][1]])
+                result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
+                result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
+                r = choice(result)
+                if z[r[0]][r[1]] != '[O]':
+                    return r
+                else:
+                    continue
