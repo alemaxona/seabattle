@@ -75,7 +75,7 @@ while game == 1:
 
 
 # Speed robots
-            ROBOT_SPEED = 3    # Delay for 7 seconds.
+            ROBOT_SPEED = 2    # Delay for 7 seconds.
             # sleep(ROBOT_SPEED)
 
 # Write fields to players storage
@@ -523,7 +523,6 @@ while game == 1:
                     check = 0
                     shot_coo = robot_input_coo_shot(player_obj_reverse, player_obj, check)
                     player_obj.history_shots.append(shot_coo)
-                    print('Player history shots', player_obj.history_shots)
                     # Stats
                     player_obj.number_of_shots += 1
                     # Hit check

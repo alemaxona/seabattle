@@ -357,4 +357,35 @@ def robot_input_coo_ship(player_obj, ship):
 
 
 def robot_input_coo_shot(obj_reverse, obj, check):
-    pass
+    # if len(obj.history_shots) > 0:
+    #     if obj.history_shots[-1][0] == obj.history_shots[-2][0]:
+    #         pass
+    #     elif obj.history_shots[-1][1] == obj.history_shots[-2][1]:
+    #         pass
+    #     elif obj.history_shots[-1][0] == obj.history_shots[-2][0] == obj.history_shots[-3][0]:
+    #         pass
+    #     elif obj.history_shots[-1][1] == obj.history_shots[-2][1] == obj.history_shots[-3][1]:
+    #         pass
+    #     elif obj.history_shots[-1][0] == obj.history_shots[-2][0] == obj.history_shots[-3][0] == obj.history_shots[-4][0]:
+    #         pass
+    #     elif obj.history_shots[-1][1] == obj.history_shots[-2][1] == obj.history_shots[-3][1] == obj.history_shots[-4][1]:
+    #         pass
+    #     else:
+    #         pass
+    # else:
+    while True:
+        x = randint(0, (len(Storage.field_players[obj_reverse.queue]) - 1))
+        y = randint(0, (len(Storage.field_players[obj_reverse.queue][0]) - 1))
+        if Storage.field_players[obj_reverse.queue][x][y] != '[O]':
+            return [x, y]
+        else:
+            continue
+
+        # if z[coo[0] - 1][coo[1]] == ' * ' and \
+        #         z[coo[0] - 1][coo[1] + 1] == ' * ' and \
+        #         z[coo[0]][coo[1] + 1] == ' * ' and \
+        #         z[coo[0] + 1][coo[1] + 1] == ' * ' and \
+        #         z[coo[0] + 1][coo[1]] == ' * ' and \
+        #         z[coo[0] + 1][coo[1] - 1] == ' * ' and \
+        #         z[coo[0]][coo[1] - 1] == ' * ' and \
+        #         z[coo[0] - 1][coo[1] - 1] == ' * ':
