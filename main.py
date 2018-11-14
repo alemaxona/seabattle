@@ -18,7 +18,8 @@ from models import Field, \
 from user_input import user_input_coo_ship, \
     user_input_coo_field, \
     robot_input_coo_ship, \
-    robot_input_coo_shot
+    robot_input_coo_shot, \
+    indent_from_ships
 
 
 print('\n*** SEABATTLE ***\n\n')
@@ -72,14 +73,14 @@ while game == 1:
             if player2.name.upper() == 'ROBOT' or player2.name.upper() == 'ROBOT.2':
                 player2.robot = 1
 
+
 # Speed robots
             ROBOT_SPEED = 3    # Delay for 7 seconds.
-            sleep(ROBOT_SPEED)
+            # sleep(ROBOT_SPEED)
 
 # Write fields to players storage
             field.write_field_to_storage_players(player1)
             field.write_field_to_storage_players(player2)
-
 
 # Show max number of ships for this field
             max_ships = check_max_ships_for_field()
@@ -91,7 +92,7 @@ while game == 1:
                 print('Three deck ship -', max_ships[2])
             if max_ships[3] != 0:
                 print('Four deck ship -', max_ships[3])
-            sleep(ROBOT_SPEED)
+            # sleep(ROBOT_SPEED)
 
 
 # Random chose queue players!
@@ -119,20 +120,24 @@ while game == 1:
                             if check_busy(ship_coo, player_obj) == 0:  # Check cell for busy
                                 print('Place is busy! Enter coordinates again.')
                             else:
-                                # Write map with single ships to players storage
-                                Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[1]'
-                                # Add ship to storage
-                                Storage.add_ships([ship_coo], player_obj)
-                                print('\n', end='')
-                                # num_y = [' * ' for i in range(len(Storage.field[0]))]
-                                # print(' ', num_y)
-                                num_x = 1
-                                for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
-                                    print(num_x, row)
-                                    num_x += 1
-                                n += 0.1
-                                n = round(n, 1)  # Округление
-                                i += 1
+                                # Check indent
+                                if indent_from_ships(player_obj, ship_coo) == 1:
+                                    # Write map with single ships to players storage
+                                    Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[1]'
+                                    # Add ship to storage
+                                    Storage.add_ships([ship_coo], player_obj)
+                                    print('\n', end='')
+                                    # num_y = [' * ' for i in range(len(Storage.field[0]))]
+                                    # print(' ', num_y)
+                                    num_x = 1
+                                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
+                                        print(num_x, row)
+                                        num_x += 1
+                                    n += 0.1
+                                    n = round(n, 1)  # Округление
+                                    i += 1
+                                else:
+                                    print('Build ship error! Not indent!')
                     else:
                         print('\nROBOT enters coordinates single deck ships (1 cell)')
                         ship_coo_robot = robot_input_coo_ship(player_obj, 1)
@@ -166,43 +171,51 @@ while game == 1:
                     if player_obj.robot == 0:
                         print('\nEnter coordinates 1/2 ship')
                         ship_coo = user_input_coo_ship()
-                        print('Enter coordinates 1/2 ship')
+                        print('Enter coordinates 2/2 ship')
                         ship_coo2 = user_input_coo_ship()
                         if isinstance(ship_coo, list) and isinstance(ship_coo2, list):
-                            # ship_coo1 != ship_coo2 != ship_coo3
-                            if ship_coo != ship_coo2:
-                                if check_busy(ship_coo, player_obj) == 0 or\
-                                        check_busy(ship_coo2, player_obj) == 0:  # Check cell for busy
-                                    print('Cell is busy! Enter coo again.')
-                                    print('\n', end='')
-                                    for row in Storage.field_players[player_obj.queue]:  # Show map players with ship/s
-                                        print(row)
-                                else:
-                                    if ship_connection_check([ship_coo, ship_coo2]) == 1:
-                                        # Write map with two ships to players storage
-                                        Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[2]'
-                                        Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[2]'
-                                        # Add ship to storage
-                                        Storage.add_ships([ship_coo, ship_coo2], player_obj)
-                                        print('\n', end='')
-                                        num_x = 1
-                                        # Show map players with ship/s
-                                        for row in Storage.field_players[player_obj.queue]:
-                                            print(num_x, row)
-                                            num_x += 1
-                                        n += 0.1
-                                        n = round(n, 1)  # Округление
-                                        i += 1
+                            # Check indent
+                            if indent_from_ships(player_obj, ship_coo) == 1:
+                                # Check indent
+                                if indent_from_ships(player_obj, ship_coo2) == 1:
+                                    if ship_coo != ship_coo2:
+                                        if check_busy(ship_coo, player_obj) == 0 or\
+                                                check_busy(ship_coo2, player_obj) == 0:  # Check cell for busy
+                                            print('Cell is busy! Enter coo again.')
+                                            print('\n', end='')
+                                            # Show map players with ship/s
+                                            for row in Storage.field_players[player_obj.queue]:
+                                                print(row)
+                                        else:
+                                            if ship_connection_check([ship_coo, ship_coo2]) == 1:
+                                                # Write map with two ships to players storage
+                                                Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[2]'
+                                                Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[2]'
+                                                # Add ship to storage
+                                                Storage.add_ships([ship_coo, ship_coo2], player_obj)
+                                                print('\n', end='')
+                                                num_x = 1
+                                                # Show map players with ship/s
+                                                for row in Storage.field_players[player_obj.queue]:
+                                                    print(num_x, row)
+                                                    num_x += 1
+                                                n += 0.1
+                                                n = round(n, 1)  # Округление
+                                                i += 1
+                                            else:
+                                                print('Build ship error!')
+                                                print('\n', end='')
+                                                num_x = 1
+                                                # Show map players with ship/s
+                                                for row in Storage.field_players[player_obj.queue]:
+                                                    print(num_x, row)
+                                                    num_x += 1
                                     else:
-                                        print('Build ship error!')
-                                        print('\n', end='')
-                                        num_x = 1
-                                        # Show map players with ship/s
-                                        for row in Storage.field_players[player_obj.queue]:
-                                            print(num_x, row)
-                                            num_x += 1
+                                        print('Build ship error! The coordinates parts of ship must be unique!')
+                                else:
+                                    print('Build ship error! Not indent!')
                             else:
-                                print('Build ship error! The coordinates of the parts of the ship must be unique!')
+                                print('Build ship error! Not indent!')
                     else:
                         print('\nROBOT enters coordinates two deck ships (2 cell)')
                         ship_coo_robot = robot_input_coo_ship(player_obj, 2)
@@ -236,50 +249,63 @@ while game == 1:
                     if player_obj.robot == 0:
                         print('\nEnter coordinates 1/3 ship')
                         ship_coo = user_input_coo_ship()
-                        print('Enter coordinates 1/3 ship')
+                        print('Enter coordinates 2/3 ship')
                         ship_coo2 = user_input_coo_ship()
-                        print('Enter coordinates 1/3 ship')
+                        print('Enter coordinates 3/3 ship')
                         ship_coo3 = user_input_coo_ship()
                         if isinstance(ship_coo, list) and isinstance(ship_coo2, list) and isinstance(ship_coo3, list):
-                            # Pre write! ship_coo1 != ship_coo2 != ship_coo3
-                            if ship_coo != ship_coo2 and ship_coo != ship_coo3 and ship_coo2 != ship_coo3:
-                                if check_busy(ship_coo, player_obj) == 0 or\
-                                        check_busy(ship_coo2, player_obj) == 0 or\
-                                        check_busy(ship_coo3, player_obj) == 0:  # Check cell for busy
-                                    print('Cell is busy! Enter coo again.')
-                                    print('\n', end='')
-                                    num_x = 1
-                                    # Show map players with ship/s
-                                    for row in Storage.field_players[player_obj.queue]:
-                                        print(num_x, row)
-                                        num_x += 1
-                                else:
-                                    if ship_connection_check([ship_coo, ship_coo2, ship_coo3]) == 1:
-                                        # Write map with two ships to players storage
-                                        Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[3]'
-                                        Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[3]'
-                                        Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[3]'
-                                        # Add ship to storage
-                                        Storage.add_ships([ship_coo, ship_coo2, ship_coo3], player_obj)
-                                        print('\n', end='')
-                                        num_x = 1
-                                        # Show map players with ship/s
-                                        for row in Storage.field_players[player_obj.queue]:
-                                            print(num_x, row)
-                                            num_x += 1
-                                        n += 0.1
-                                        n = round(n, 1)  # Округление
-                                        i += 1
+                            # Check indent
+                            if indent_from_ships(player_obj, ship_coo) == 1:
+                                # Check indent
+                                if indent_from_ships(player_obj, ship_coo2) == 1:
+                                    # Check indent
+                                    if indent_from_ships(player_obj, ship_coo3) == 1:
+                                        # Pre write! ship_coo1 != ship_coo2 != ship_coo3
+                                        if ship_coo != ship_coo2 and ship_coo != ship_coo3 and ship_coo2 != ship_coo3:
+                                            if check_busy(ship_coo, player_obj) == 0 or\
+                                                    check_busy(ship_coo2, player_obj) == 0 or\
+                                                    check_busy(ship_coo3, player_obj) == 0:  # Check cell for busy
+                                                print('Cell is busy! Enter coo again.')
+                                                print('\n', end='')
+                                                num_x = 1
+                                                # Show map players with ship/s
+                                                for row in Storage.field_players[player_obj.queue]:
+                                                    print(num_x, row)
+                                                    num_x += 1
+                                            else:
+                                                if ship_connection_check([ship_coo, ship_coo2, ship_coo3]) == 1:
+                                                    # Write map with two ships to players storage
+                                                    Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[3]'
+                                                    Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[3]'
+                                                    Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[3]'
+                                                    # Add ship to storage
+                                                    Storage.add_ships([ship_coo, ship_coo2, ship_coo3], player_obj)
+                                                    print('\n', end='')
+                                                    num_x = 1
+                                                    # Show map players with ship/s
+                                                    for row in Storage.field_players[player_obj.queue]:
+                                                        print(num_x, row)
+                                                        num_x += 1
+                                                    n += 0.1
+                                                    n = round(n, 1)  # Округление
+                                                    i += 1
+                                                else:
+                                                    print('Build ship error!')
+                                                    print('\n', end='')
+                                                    num_x = 1
+                                                    # Show map players with ship/s
+                                                    for row in Storage.field_players[player_obj.queue]:
+                                                        print(num_x, row)
+                                                        num_x += 1
+                                        else:
+                                            print('Build ship error!'
+                                                  ' The coordinates of the parts of the ship must be unique!')
                                     else:
-                                        print('Build ship error!')
-                                        print('\n', end='')
-                                        num_x = 1
-                                        # Show map players with ship/s
-                                        for row in Storage.field_players[player_obj.queue]:
-                                            print(num_x, row)
-                                            num_x += 1
+                                        print('Build ship error! Not indent!')
+                                else:
+                                    print('Build ship error! Not indent!')
                             else:
-                                print('Build ship error! The coordinates of the parts of the ship must be unique!')
+                                print('Build ship error! Not indent!')
                     else:
                         print('\nROBOT enters coordinates three deck ships (3 cell)')
                         ship_coo_robot = robot_input_coo_ship(player_obj, 3)
@@ -315,61 +341,78 @@ while game == 1:
                     if player_obj.robot == 0:
                         print('\nEnter coordinates 1/4 ship')
                         ship_coo = user_input_coo_ship()
-                        print('Enter coordinates 1/4 ship')
+                        print('Enter coordinates 2/4 ship')
                         ship_coo2 = user_input_coo_ship()
-                        print('Enter coordinates 1/4 ship')
+                        print('Enter coordinates 3/4 ship')
                         ship_coo3 = user_input_coo_ship()
-                        print('Enter coordinates 1/4 ship')
+                        print('Enter coordinates 4/4 ship')
                         ship_coo4 = user_input_coo_ship()
                         if isinstance(ship_coo, list) and\
                                 isinstance(ship_coo2, list) and\
                                 isinstance(ship_coo3, list) and\
                                 isinstance(ship_coo4, list):
-                            # Pre write! ship_coo1 != ship_coo2 != ship_coo3 != ship_coo4
-                            if ship_coo != ship_coo2 and ship_coo != ship_coo3 and ship_coo != ship_coo4 and\
-                                    ship_coo2 != ship_coo3 and ship_coo2 != ship_coo4 and\
-                                    ship_coo3 != ship_coo4:
-                                # Check cell for busy:  # Check cell for busy
-                                if check_busy(ship_coo, player_obj) == 0 or\
-                                        check_busy(ship_coo2, player_obj) == 0 or\
-                                        check_busy(ship_coo3, player_obj) == 0 or \
-                                        check_busy(ship_coo4, player_obj) == 0:
-                                    print('Cell is busy! Enter coo again.')
-                                    print('\n', end='')
-                                    num_x = 1
-                                    # Show map players with ship/s
-                                    for row in Storage.field_players[player_obj.queue]:
-                                        print(num_x, row)
-                                        num_x += 1
-                                else:
-                                    if ship_connection_check([ship_coo, ship_coo2, ship_coo3, ship_coo4]) == 1:
-                                        # Write map with two ships to players storage
-                                        Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[4]'
-                                        Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[4]'
-                                        Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[4]'
-                                        Storage.field_players[player_obj.queue][ship_coo4[0]][ship_coo4[1]] = '[4]'
-                                        # Add ship to storage
-                                        Storage.add_ships([ship_coo, ship_coo2, ship_coo3, ship_coo4], player_obj)
-                                        print('\n', end='')
-                                        num_x = 1
-                                        # Show map players with ship/s
-                                        for row in Storage.field_players[player_obj.queue]:
-                                            print(num_x, row)
-                                            num_x += 1
-                                        n += 0.1
-                                        n = round(n, 1)  # Округление
-                                        i += 1
+                            # Check indent
+                            if indent_from_ships(player_obj, ship_coo) == 1:
+                                # Check indent
+                                if indent_from_ships(player_obj, ship_coo2) == 1:
+                                    # Check indent
+                                    if indent_from_ships(player_obj, ship_coo3) == 1:
+                                        # Check indent
+                                        if indent_from_ships(player_obj, ship_coo4) == 1:
+                                            # Pre write! ship_coo1 != ship_coo2 != ship_coo3 != ship_coo4
+                                            if ship_coo != ship_coo2 and ship_coo != ship_coo3 and ship_coo != ship_coo4 and\
+                                                    ship_coo2 != ship_coo3 and ship_coo2 != ship_coo4 and\
+                                                    ship_coo3 != ship_coo4:
+                                                # Check cell for busy:  # Check cell for busy
+                                                if check_busy(ship_coo, player_obj) == 0 or\
+                                                        check_busy(ship_coo2, player_obj) == 0 or\
+                                                        check_busy(ship_coo3, player_obj) == 0 or \
+                                                        check_busy(ship_coo4, player_obj) == 0:
+                                                    print('Cell is busy! Enter coo again.')
+                                                    print('\n', end='')
+                                                    num_x = 1
+                                                    # Show map players with ship/s
+                                                    for row in Storage.field_players[player_obj.queue]:
+                                                        print(num_x, row)
+                                                        num_x += 1
+                                                else:
+                                                    if ship_connection_check([ship_coo, ship_coo2, ship_coo3, ship_coo4]) == 1:
+                                                        # Write map with two ships to players storage
+                                                        Storage.field_players[player_obj.queue][ship_coo[0]][ship_coo[1]] = '[4]'
+                                                        Storage.field_players[player_obj.queue][ship_coo2[0]][ship_coo2[1]] = '[4]'
+                                                        Storage.field_players[player_obj.queue][ship_coo3[0]][ship_coo3[1]] = '[4]'
+                                                        Storage.field_players[player_obj.queue][ship_coo4[0]][ship_coo4[1]] = '[4]'
+                                                        # Add ship to storage
+                                                        Storage.add_ships([ship_coo, ship_coo2, ship_coo3, ship_coo4], player_obj)
+                                                        print('\n', end='')
+                                                        num_x = 1
+                                                        # Show map players with ship/s
+                                                        for row in Storage.field_players[player_obj.queue]:
+                                                            print(num_x, row)
+                                                            num_x += 1
+                                                        n += 0.1
+                                                        n = round(n, 1)  # Округление
+                                                        i += 1
+                                                    else:
+                                                        print('Build ship error!')
+                                                        print('\n', end='')
+                                                        num_x = 1
+                                                        # Show map players with ship/s
+                                                        for row in Storage.field_players[player_obj.queue]:
+                                                            print(num_x, row)
+                                                            num_x += 1
+                                                            # Second cycle pass | Второй проход цикла.
+                                            else:
+                                                print('Build ship error!'
+                                                      ' The coordinates of the parts of the ship must be unique!')
+                                        else:
+                                            print('Build ship error! Not indent!')
                                     else:
-                                        print('Build ship error!')
-                                        print('\n', end='')
-                                        num_x = 1
-                                        # Show map players with ship/s
-                                        for row in Storage.field_players[player_obj.queue]:
-                                            print(num_x, row)
-                                            num_x += 1
-                                            # Second cycle pass | Второй проход цикла.
+                                        print('Build ship error! Not indent!')
+                                else:
+                                    print('Build ship error! Not indent!')
                             else:
-                                print('Build ship error! The coordinates of the parts of the ship must be unique!')
+                                print('Build ship error! Not indent!')
                     else:
                         print('\nROBOT enters coordinates four deck ships (4 cell)')
                         ship_coo_robot = robot_input_coo_ship(player_obj, 4)
@@ -539,6 +582,7 @@ while game == 1:
                 print(row)
 
 # Deleting param
+            del field
             del Storage.shots_field_players
             del player1
             del player2

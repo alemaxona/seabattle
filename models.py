@@ -97,11 +97,13 @@ def check_busy(size, obj_player):
 
     if Storage.field_players[obj_player.queue][size[0]][size[1]] == ' * ':
         return 1
-    elif Storage.field_players[obj_player.queue][size[0]][size[1]] == '[1]' or \
-            Storage.field_players[obj_player.queue][size[0]][size[1]] == '[2]' or \
-            Storage.field_players[obj_player.queue][size[0]][size[1]] == '[3]' or \
-            Storage.field_players[obj_player.queue][size[0]][size[1]] == '[4]':
+    else:
         return 0
+    # elif Storage.field_players[obj_player.queue][size[0]][size[1]] == '[1]' or \
+    #         Storage.field_players[obj_player.queue][size[0]][size[1]] == '[2]' or \
+    #         Storage.field_players[obj_player.queue][size[0]][size[1]] == '[3]' or \
+    #         Storage.field_players[obj_player.queue][size[0]][size[1]] == '[4]':
+    #     return 0
 
 
 def ship_connection_check(coo):
@@ -161,14 +163,14 @@ def check_max_ships_for_field():
     Summing field cells for check the number of ships
     """
 
-    if len(Storage.field) == 1:
+    if len(Storage.field_players[0]) == 1:
         max_ship1 = 1
         max_ship2 = 0
         max_ship3 = 0
         max_ship4 = 0
         return [max_ship1, max_ship2, max_ship3, max_ship4]
     else:
-        sum_cell = len(Storage.field[0]) * len(Storage.field[1])
+        sum_cell = len(Storage.field_players[0]) * len(Storage.field_players[0][0])
         if sum_cell <= 9:
             max_ship1 = 1
             max_ship2 = 0
@@ -176,17 +178,17 @@ def check_max_ships_for_field():
             max_ship4 = 0
         elif (sum_cell >= 10) and (sum_cell <= 20):
             max_ship1 = 2
-            max_ship2 = 1
+            max_ship2 = 0
             max_ship3 = 0
             max_ship4 = 0
         elif (sum_cell >= 21) and (sum_cell <= 30):
-            max_ship1 = 0#2
-            max_ship2 = 0#1
-            max_ship3 = 0#1
-            max_ship4 = 1#0
+            max_ship1 = 2
+            max_ship2 = 1
+            max_ship3 = 0
+            max_ship4 = 0
         elif (sum_cell >= 31) and (sum_cell <= 50):
             max_ship1 = 3
-            max_ship2 = 2
+            max_ship2 = 1
             max_ship3 = 1
             max_ship4 = 0
         elif (sum_cell >= 51) and (sum_cell <= 100):
