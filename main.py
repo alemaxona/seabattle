@@ -464,7 +464,7 @@ while game == 1:
 
 # Shots
             # !!!!!!!!
-            ROBOT_SPEED = 5
+            ROBOT_SPEED = 4
             # !!!!!!!!
             while True:
                 if QUEUE == 0:

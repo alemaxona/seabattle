@@ -364,9 +364,8 @@ def robot_input_coo_shot(obj_reverse, obj):
             x = randint(0, (len(Storage.field_players[obj_reverse.queue]) - 1))
             y = randint(0, (len(Storage.field_players[obj_reverse.queue][0]) - 1))
             return [x, y]
-    # Если последний шот в истории промах или убийство
-    elif z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[O]' or \
-            z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[X]':
+    # Если последний шот в истории - убийство
+    elif z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[X]':
         while True:
             x = randint(0, (len(Storage.field_players[obj_reverse.queue]) - 1))
             y = randint(0, (len(Storage.field_players[obj_reverse.queue][0]) - 1))
@@ -377,8 +376,9 @@ def robot_input_coo_shot(obj_reverse, obj):
                 return [x, y]
             else:
                 continue
-    # Если последний шот в истории - ранение
-    elif z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[x]':
+    # Если последний шот в истории - ранение или промах ???
+    elif z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[O]' or \
+            z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[x]':
         rows = len(Storage.field_players[obj.queue]) - 1
         columns = len(Storage.field_players[obj.queue][0]) - 1
         result = []
@@ -388,8 +388,7 @@ def robot_input_coo_shot(obj_reverse, obj):
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
                 result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
                 r = choice(result)
-                print('r', r)
-                if z[r[0]][r[1]] != '[O]':
+                if z[r[0]][r[1]] != '[O]' and z[r[0]][r[1]] != '[x]':  # ???
                     return r
                 else:
                     continue
@@ -398,7 +397,7 @@ def robot_input_coo_shot(obj_reverse, obj):
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
                 result.append([obj.history_shots[-1][0] - 1, obj.history_shots[-1][1]])
                 r = choice(result)
-                if z[r[0]][r[1]] != '[O]':
+                if z[r[0]][r[1]] != '[O]' and z[r[0]][r[1]] != '[x]':
                     return r
                 else:
                     continue
@@ -407,7 +406,7 @@ def robot_input_coo_shot(obj_reverse, obj):
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
                 result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
                 r = choice(result)
-                if z[r[0]][r[1]] != '[O]':
+                if z[r[0]][r[1]] != '[O]' and z[r[0]][r[1]] != '[x]':
                     return r
                 else:
                     continue
@@ -416,7 +415,7 @@ def robot_input_coo_shot(obj_reverse, obj):
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
                 result.append([obj.history_shots[-1][0] - 1, obj.history_shots[-1][1]])
                 r = choice(result)
-                if z[r[0]][r[1]] != '[O]':
+                if z[r[0]][r[1]] != '[O]' and z[r[0]][r[1]] != '[x]':
                     return r
                 else:
                     continue
@@ -427,7 +426,7 @@ def robot_input_coo_shot(obj_reverse, obj):
                 result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
                 r = choice(result)
-                if z[r[0]][r[1]] != '[O]':
+                if z[r[0]][r[1]] != '[O]' and z[r[0]][r[1]] != '[x]':
                     return r
                 else:
                     continue
@@ -437,7 +436,7 @@ def robot_input_coo_shot(obj_reverse, obj):
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
                 result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
                 r = choice(result)
-                if z[r[0]][r[1]] != '[O]':
+                if z[r[0]][r[1]] != '[O]' and z[r[0]][r[1]] != '[x]':
                     return r
                 else:
                     continue
@@ -447,7 +446,7 @@ def robot_input_coo_shot(obj_reverse, obj):
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
                 result.append([obj.history_shots[-1][0] - 1, obj.history_shots[-1][1]])
                 r = choice(result)
-                if z[r[0]][r[1]] != '[O]':
+                if z[r[0]][r[1]] != '[O]' and z[r[0]][r[1]] != '[x]':
                     return r
                 else:
                     continue
@@ -457,7 +456,7 @@ def robot_input_coo_shot(obj_reverse, obj):
                 result.append([obj.history_shots[-1][0] + 1, obj.history_shots[-1][1]])
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
                 r = choice(result)
-                if z[r[0]][r[1]] != '[O]':
+                if z[r[0]][r[1]] != '[O]' and z[r[0]][r[1]] != '[x]':
                     return r
                 else:
                     continue
@@ -469,7 +468,7 @@ def robot_input_coo_shot(obj_reverse, obj):
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] - 1])
                 result.append([obj.history_shots[-1][0], obj.history_shots[-1][1] + 1])
                 r = choice(result)
-                if z[r[0]][r[1]] != '[O]':
+                if z[r[0]][r[1]] != '[O]' and z[r[0]][r[1]] != '[x]':
                     return r
                 else:
                     continue
