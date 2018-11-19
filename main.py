@@ -464,7 +464,7 @@ while game == 1:
 
 # Shots
             # !!!!!!!!
-            ROBOT_SPEED = 4
+            ROBOT_SPEED = 2
             # !!!!!!!!
             while True:
                 if QUEUE == 0:
@@ -585,8 +585,8 @@ while game == 1:
                 print(row)
 
 # Deleting param
+            Storage.shots_field_players = {}
             del field
-            del Storage.shots_field_players
             del player1
             del player2
 
