@@ -87,20 +87,6 @@ class Field(object):
         Storage.shots_field_players[obj.queue] = deepcopy(self.result)
 
 
-def check_busy(size, obj_player):
-
-    """
-    Check cell to free on players fields.
-
-    If '*' - free.
-    """
-
-    if Storage.field_players[obj_player.queue][size[0]][size[1]] == ' * ':
-        return 1
-    else:
-        return 0
-
-
 def ship_connection_check(coo):
 
     """
@@ -194,6 +180,125 @@ def check_max_ships_for_field():
         return [max_ship1, max_ship2, max_ship3, max_ship4]
 
 
+def indent_from_ships(obj, coo):
+
+    """
+    Check indent for ships.
+    """
+
+    rows = len(Storage.field_players[obj.queue]) - 1
+    columns = len(Storage.field_players[obj.queue][0]) - 1
+    z = Storage.field_players[obj.queue]
+    if rows < 3:
+        return 1
+    # field corners
+    if coo[0] == 0 and coo[1] == 0:  # [0, 0]
+        if z[coo[0]][coo[1] + 1] == ' * ' and \
+                z[coo[0] + 1][coo[1] + 1] == ' * ' and \
+                z[coo[0] + 1][coo[1]] == ' * ':
+            return 1
+    elif coo[0] == rows and coo[1] == 0:  # [rows, 0]
+        if z[coo[0] - 1][coo[1]] == ' * ' and \
+                z[coo[0] - 1][coo[1] + 1] == ' * ' and \
+                z[coo[0]][coo[1] + 1] == ' * ':
+            return 1
+    elif coo[0] == 0 and coo[1] == columns:  # [0, column]
+        if z[coo[0] + 1][coo[1]] == ' * ' and \
+                z[coo[0] + 1][coo[1] - 1] == ' * ' and \
+                z[coo[0]][coo[1] - 1] == ' * ':
+            return 1
+    elif coo[0] == rows and coo[1] == columns:  # [rows, column]
+        if z[coo[0] - 1][coo[1]] == ' * ' and \
+                z[coo[0] - 1][coo[1] - 1] == ' * ' and \
+                z[coo[0]][coo[1] - 1] == ' * ':
+            return 1
+    # field sides
+    elif coo[0] != 0 and coo[1] == 0:  # [., 0]
+        if z[coo[0] - 1][coo[1]] == ' * ' and \
+                z[coo[0] - 1][coo[1] + 1] == ' * ' and \
+                z[coo[0]][coo[1] + 1] == ' * ' and \
+                z[coo[0] + 1][coo[1] + 1] == ' * ' and \
+                z[coo[0] + 1][coo[1]] == ' * ':
+            return 1
+    elif coo[0] == 0 and coo[1] != 0:  # [0, .]
+        if z[coo[0]][coo[1] + 1] == ' * ' and \
+                z[coo[0] + 1][coo[1] + 1] == ' * ' and \
+                z[coo[0] + 1][coo[1]] == ' * ' and \
+                z[coo[0] + 1][coo[1] - 1] == ' * ' and \
+                z[coo[0]][coo[1] - 1] == ' * ':
+            return 1
+    elif coo[0] == rows and coo[1] != 0:  # [rows, .]
+        if z[coo[0] - 1][coo[1]] == ' * ' and \
+                z[coo[0] - 1][coo[1] + 1] == ' * ' and \
+                z[coo[0]][coo[1] + 1] == ' * ' and \
+                z[coo[0]][coo[1] - 1] == ' * ' and \
+                z[coo[0] - 1][coo[1] - 1] == ' * ':
+            return 1
+    elif coo[0] != 0 and coo[1] == columns:  # [., columns]
+        if z[coo[0] - 1][coo[1]] == ' * ' and \
+                z[coo[0] + 1][coo[1]] == ' * ' and \
+                z[coo[0] + 1][coo[1] - 1] == ' * ' and \
+                z[coo[0]][coo[1] - 1] == ' * ' and \
+                z[coo[0] - 1][coo[1] - 1] == ' * ':
+            return 1
+    # other
+    elif (0 < coo[0] < rows) and (0 < coo[1] < columns):
+        if z[coo[0] - 1][coo[1]] == ' * ' and \
+                z[coo[0] - 1][coo[1] + 1] == ' * ' and \
+                z[coo[0]][coo[1] + 1] == ' * ' and \
+                z[coo[0] + 1][coo[1] + 1] == ' * ' and \
+                z[coo[0] + 1][coo[1]] == ' * ' and \
+                z[coo[0] + 1][coo[1] - 1] == ' * ' and \
+                z[coo[0]][coo[1] - 1] == ' * ' and \
+                z[coo[0] - 1][coo[1] - 1] == ' * ':
+            return 1
+    else:
+        return 0
+
+
+def check_ships(obj):
+
+    """
+    Check for a ship on the field.
+    """
+
+    result = []
+
+    for row in Storage.field_players[obj.queue]:
+        if '[1]' in row:
+            result.append(1)
+        else:
+            if '[2]' in row:
+                result.append(1)
+            else:
+                if '[3]' in row:
+                    result.append(1)
+                else:
+                    if '[4]' in row:
+                        result.append(1)
+                    else:
+                        result.append(0)
+
+    if 1 in result:
+        return 1  # If ships an field
+    else:
+        return 0  # If is not ships an field
+
+
+def check_busy(size, obj_player):
+
+    """
+    Check cell to free on players fields.
+
+    If '*' - free.
+    """
+
+    if Storage.field_players[obj_player.queue][size[0]][size[1]] == ' * ':
+        return 1
+    else:
+        return 0
+
+
 def check_hit_shot(coo, obj):
 
     """
@@ -256,31 +361,3 @@ def check_repeat_shot(coo, obj):
     else:
         return 0
 
-
-def check_ships(obj):
-
-    """
-    Check for a ship on the field.
-    """
-
-    result = []
-
-    for row in Storage.field_players[obj.queue]:
-        if '[1]' in row:
-            result.append(1)
-        else:
-            if '[2]' in row:
-                result.append(1)
-            else:
-                if '[3]' in row:
-                    result.append(1)
-                else:
-                    if '[4]' in row:
-                        result.append(1)
-                    else:
-                        result.append(0)
-
-    if 1 in result:
-        return 1  # If ships an field
-    else:
-        return 0  # If is not ships an field

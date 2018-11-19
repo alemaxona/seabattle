@@ -1,10 +1,10 @@
 __author__ = 'alemaxona'
 
 """
-user_input.py - Functions check inputs users or robots.
+input.py - Functions inputs with users or robots.
 """
 
-from models import Storage
+from models import Storage, indent_from_ships
 from random import randint, choice
 
 
@@ -60,82 +60,6 @@ def user_input_coo_ship():
         except ValueError:
             print('Enter only numbers')
             break
-
-
-def indent_from_ships(obj, coo):
-
-    """
-    Check indent for ships.
-    """
-
-    rows = len(Storage.field_players[obj.queue]) - 1
-    columns = len(Storage.field_players[obj.queue][0]) - 1
-    z = Storage.field_players[obj.queue]
-    if rows < 3:
-        return 1
-    # field corners
-    if coo[0] == 0 and coo[1] == 0:  # [0, 0]
-        if z[coo[0]][coo[1] + 1] == ' * ' and \
-                z[coo[0] + 1][coo[1] + 1] == ' * ' and \
-                z[coo[0] + 1][coo[1]] == ' * ':
-            return 1
-    elif coo[0] == rows and coo[1] == 0:  # [rows, 0]
-        if z[coo[0] - 1][coo[1]] == ' * ' and \
-                z[coo[0] - 1][coo[1] + 1] == ' * ' and \
-                z[coo[0]][coo[1] + 1] == ' * ':
-            return 1
-    elif coo[0] == 0 and coo[1] == columns:  # [0, column]
-        if z[coo[0] + 1][coo[1]] == ' * ' and \
-                z[coo[0] + 1][coo[1] - 1] == ' * ' and \
-                z[coo[0]][coo[1] - 1] == ' * ':
-            return 1
-    elif coo[0] == rows and coo[1] == columns:  # [rows, column]
-        if z[coo[0] - 1][coo[1]] == ' * ' and \
-                z[coo[0] - 1][coo[1] - 1] == ' * ' and \
-                z[coo[0]][coo[1] - 1] == ' * ':
-            return 1
-    # field sides
-    elif coo[0] != 0 and coo[1] == 0:  # [., 0]
-        if z[coo[0] - 1][coo[1]] == ' * ' and \
-                z[coo[0] - 1][coo[1] + 1] == ' * ' and \
-                z[coo[0]][coo[1] + 1] == ' * ' and \
-                z[coo[0] + 1][coo[1] + 1] == ' * ' and \
-                z[coo[0] + 1][coo[1]] == ' * ':
-            return 1
-    elif coo[0] == 0 and coo[1] != 0:  # [0, .]
-        if z[coo[0]][coo[1] + 1] == ' * ' and \
-                z[coo[0] + 1][coo[1] + 1] == ' * ' and \
-                z[coo[0] + 1][coo[1]] == ' * ' and \
-                z[coo[0] + 1][coo[1] - 1] == ' * ' and \
-                z[coo[0]][coo[1] - 1] == ' * ':
-            return 1
-    elif coo[0] == rows and coo[1] != 0:  # [rows, .]
-        if z[coo[0] - 1][coo[1]] == ' * ' and \
-                z[coo[0] - 1][coo[1] + 1] == ' * ' and \
-                z[coo[0]][coo[1] + 1] == ' * ' and \
-                z[coo[0]][coo[1] - 1] == ' * ' and \
-                z[coo[0] - 1][coo[1] - 1] == ' * ':
-            return 1
-    elif coo[0] != 0 and coo[1] == columns:  # [., columns]
-        if z[coo[0] - 1][coo[1]] == ' * ' and \
-                z[coo[0] + 1][coo[1]] == ' * ' and \
-                z[coo[0] + 1][coo[1] - 1] == ' * ' and \
-                z[coo[0]][coo[1] - 1] == ' * ' and \
-                z[coo[0] - 1][coo[1] - 1] == ' * ':
-            return 1
-    # other
-    elif (0 < coo[0] < rows) and (0 < coo[1] < columns):
-        if z[coo[0] - 1][coo[1]] == ' * ' and \
-                z[coo[0] - 1][coo[1] + 1] == ' * ' and \
-                z[coo[0]][coo[1] + 1] == ' * ' and \
-                z[coo[0] + 1][coo[1] + 1] == ' * ' and \
-                z[coo[0] + 1][coo[1]] == ' * ' and \
-                z[coo[0] + 1][coo[1] - 1] == ' * ' and \
-                z[coo[0]][coo[1] - 1] == ' * ' and \
-                z[coo[0] - 1][coo[1] - 1] == ' * ':
-            return 1
-    else:
-        return 0
 
 
 def robot_input_coo_ship(player_obj, ship):
@@ -361,26 +285,26 @@ def robot_input_coo_shot(obj_reverse, obj):
     # Первый выстрел
     if len(obj.history_shots) == 0:
         while True:
-            x = randint(0, (len(Storage.field_players[obj_reverse.queue]) - 1))
-            y = randint(0, (len(Storage.field_players[obj_reverse.queue][0]) - 1))
+            x = randint(0, (len(z) - 1))
+            y = randint(0, (len(z[0]) - 1))
             return [x, y]
     # Если последний шот в истории - убийство
     elif z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[X]':
         while True:
-            x = randint(0, (len(Storage.field_players[obj_reverse.queue]) - 1))
-            y = randint(0, (len(Storage.field_players[obj_reverse.queue][0]) - 1))
+            x = randint(0, (len(z) - 1))
+            y = randint(0, (len(z[0]) - 1))
             # новый шот в ' * '
-            if Storage.field_players[obj_reverse.queue][x][y] != '[O]' and \
-                Storage.field_players[obj_reverse.queue][x][y] != '[X]' and \
-                    Storage.field_players[obj_reverse.queue][x][y] != '[x]':
+            if z[x][y] != '[O]' and \
+                z[x][y] != '[X]' and \
+                    z[x][y] != '[x]':
                 return [x, y]
             else:
                 continue
     # Если последний шот в истории - ранение или промах ???
-    elif z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[O]' or \
-            z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[x]':
-        rows = len(Storage.field_players[obj.queue]) - 1
-        columns = len(Storage.field_players[obj.queue][0]) - 1
+    elif z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[x]' or \
+            z[obj.history_shots[-1][0]][obj.history_shots[-1][1]] == '[O]':
+        rows = len(z) - 1
+        columns = len(z[0]) - 1
         result = []
         # field corners
         if obj.history_shots[-1][0] == 0 and obj.history_shots[-1][1] == 0:  # [0, 0]

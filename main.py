@@ -14,12 +14,12 @@ from models import Field, \
     ship_connection_check, \
     check_hit_shot, \
     check_ships, \
-    check_repeat_shot
-from user_input import user_input_coo_ship, \
+    check_repeat_shot, \
+    indent_from_ships
+from input import user_input_coo_ship, \
     user_input_coo_field, \
     robot_input_coo_ship, \
-    robot_input_coo_shot, \
-    indent_from_ships
+    robot_input_coo_shot
 
 
 print('\n*** SEABATTLE ***\n\n')
@@ -539,9 +539,9 @@ while game == 1:
                         # Write shots to shots field
                         Storage.shots_field_players[player_obj.queue][shot_coo[0]][shot_coo[1]] = '[X]'
                         if check_ships(player_obj_reverse) == 0:
-                            print('\n****************')
+                            print('\n******************')
                             print('*** Robot win! ***')
-                            print('****************')
+                            print('******************')
                             break
                     elif check_hit_shot(shot_coo, player_obj_reverse) == 2:
                         print('Robot hit the ship! Keep going.')
@@ -563,7 +563,8 @@ while game == 1:
                         elif QUEUE == 1:
                             QUEUE = 0
 
-            print('\n******* WINNER ******* - ', player_obj.name)
+            print('\n******* WINNER *******')
+            print('       ', player_obj.name)
 
 
 # Show stats
@@ -572,7 +573,7 @@ while game == 1:
                   '\nTotal hits shots:', player1.target_shots,
                   '\nTotal miss shots:', player1.number_of_shots - player1.target_shots,
                   '\nShots map: \n')
-            for row in Storage.shots_field_players[player1.queue]:  # Show map players with ship/s
+            for row in Storage.shots_field_players[player1.queue]:
                 print(row)
 
             print('\nPlayer:', player2.name,
@@ -580,7 +581,7 @@ while game == 1:
                   '\nTotal hits shots:', player2.target_shots,
                   '\nTotal miss shots:', player2.number_of_shots - player2.target_shots,
                   '\nShots map: \n')
-            for row in Storage.shots_field_players[player2.queue]:  # Show map players with ship/s
+            for row in Storage.shots_field_players[player2.queue]:
                 print(row)
 
 # Deleting param
