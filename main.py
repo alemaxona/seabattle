@@ -463,9 +463,6 @@ while game == 1:
                 sleep(ROBOT_SPEED)
 
 # Shots
-            # !!!!!!!!
-            ROBOT_SPEED = 2
-            # !!!!!!!!
             while True:
                 if QUEUE == 0:
                     player_obj = player1
@@ -568,19 +565,20 @@ while game == 1:
 
 
 # Show stats
+            print('\nPlayer statistics:')
             print('\nPlayer:', player1.name,
-                  '\nTotal shots:', player1.number_of_shots,
-                  '\nTotal hits shots:', player1.target_shots,
-                  '\nTotal miss shots:', player1.number_of_shots - player1.target_shots,
-                  '\nShots map: \n')
+                  'Total shots:', player1.number_of_shots,
+                  'Total hits shots:', player1.target_shots,
+                  'Total miss shots:', player1.number_of_shots - player1.target_shots,
+                  'Shots map: \n')
             for row in Storage.shots_field_players[player1.queue]:
                 print(row)
 
             print('\nPlayer:', player2.name,
-                  '\nTotal shots:', player2.number_of_shots,
-                  '\nTotal hits shots:', player2.target_shots,
-                  '\nTotal miss shots:', player2.number_of_shots - player2.target_shots,
-                  '\nShots map: \n')
+                  'Total shots:', player2.number_of_shots,
+                  'Total hits shots:', player2.target_shots,
+                  'Total miss shots:', player2.number_of_shots - player2.target_shots,
+                  'Shots map: \n')
             for row in Storage.shots_field_players[player2.queue]:
                 print(row)
 
